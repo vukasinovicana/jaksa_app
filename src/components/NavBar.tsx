@@ -57,6 +57,12 @@ function NavBar() {
                   </Menu.Item>
                   <Menu.Item
                     _hover={{ bg: colors.cream }}
+                    onClick={() => navigate("/raspored")}
+                  >
+                    Raspored casova
+                  </Menu.Item>
+                  <Menu.Item
+                    _hover={{ bg: colors.cream }}
                     onClick={() => navigate("/")}
                   >
                     Početna
@@ -96,6 +102,12 @@ function NavBar() {
               style={{ textDecoration: "none", color: "inherit" }}
             >
               Zahtevi
+            </Link>
+            <Link
+              to={"/raspored"}
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              Raspored casova
             </Link>
             <Link to={"/"} style={{ textDecoration: "none", color: "inherit" }}>
               Početna

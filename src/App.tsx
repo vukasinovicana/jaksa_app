@@ -6,6 +6,7 @@ import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import ProfilePage from "./pages/ProfilePage";
 import RequestsPage from "./pages/RequestsPage";
+import SchedulePage from "./pages/SchedulePage";
 
 function App() {
   return (
@@ -16,6 +17,8 @@ function App() {
       <Route path="/registracija" element={<SignupPage />} />
       <Route path="/mojProfil" element={<ProfilePage />} />
       <Route path="/zahtevi" element={<RequestsPage />} />
+      <Route path="/raspored" element={<SchedulePage />} />
+
     </Routes>
   );
 }
