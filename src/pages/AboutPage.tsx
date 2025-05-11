@@ -5,6 +5,7 @@ import slika_sa_djacima from "../assets/slika_sa_djacima.png";
 import tata_profilna from "../assets/tata_profilna.jpg";
 import { ImageSlider } from "../components/ImageSlider";
 import TextBox from "../components/TextBox";
+import ContactForm from "../components/ContactForm";
 
 const images = [tata_profilna, slika_sa_djacima];
 
@@ -42,6 +43,7 @@ function AboutPage() {
     <Box display="flex" flexDirection="column" minHeight="100vh" width="100vw">
       <NavBar />
       <AboutPageSection />
+      <ContactForm></ContactForm>
     </Box>
   );
 }
