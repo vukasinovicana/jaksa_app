@@ -1,0 +1,31 @@
+.navbar {
+    background-color: #877358; 
+    color: white;
+    padding: 12px 24px;
+    width: 100%;
+    align-items: center;
+  }
+  
+  .logoText {
+    font-size: 1.75rem; /* adjust as needed */
+    font-weight: bold;
+  }
+  
+  .phoneText {
+    font-weight: bold;
+    font-size: 1.25rem;
+  }
+  
+  .navLink {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .menuItem {
+    transition: background 0.2s;
+  }
+  
+  .menuItem:hover {
+    background-color: #EFE4D7; 
+  }
+  

@@ -1,3 +1,12 @@
+import {
+    FaGraduationCap,
+    FaBriefcase,
+    FaBook,
+    FaCheckCircle,
+    FaUsers,
+  } from "react-icons/fa";
+import { FaLocationDot } from "react-icons/fa6";
+
 export const colors = {
     brownNavbar: "#877358",
     darkBrown: "#1E1E1E",
@@ -33,3 +42,14 @@ export const texts = {
         ]
     },
 }
+
+
+// prettier-ignore
+export const stats = [
+  { icon: FaGraduationCap, value: "1500+", label: "zadovoljnih studenata", bgColor: '#0B6623'},
+  { icon: FaBriefcase, value: "30+", label: "godina iskustva", bgColor: '#3D7D45' },
+  { icon: FaBook, value: "10+", label: "napisanih zbirki", bgColor: '#679267' },
+  { icon: FaCheckCircle, value: "88%", label: "prolaznost na ispitu", bgColor: '#87A07F'},
+  { icon: FaUsers, value: "max. 7", label: "studenata u grupi", bgColor: '#A9BA9D'},
+  { icon: FaLocationDot, value: "centralna", label: "lokacija", bgColor: '#B8C9AE'},
+];

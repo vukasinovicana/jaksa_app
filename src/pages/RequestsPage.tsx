@@ -1,12 +1,9 @@
-import { Box, Flex, IconButton, Table, Text } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import NavBar from "../components/Navbar";
-import { colors } from "../constants";
-import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
 import { IoIosCloseCircle, IoIosCheckmarkCircle } from "react-icons/io";
-import { color } from "framer-motion";
+import "./css/RequestsPage.css"; // 👈 new CSS
 
 const RequestsPageSection = () => {
-  //obrisi sa backendom
   const zahtevi = [
     {
       ime: "Maja Nikolic",
@@ -27,73 +24,55 @@ const RequestsPageSection = () => {
       trajanje: "1.5h",
     },
   ];
-  //
+
   return (
-    <Flex
-      flex="1"
-      bg={colors.cream}
-      align={"center"}
-      direction={"column"}
-      p={8}
-      gap={8}
-    >
-      <Text
-        fontSize="2xl"
-        fontWeight="bold"
-        textAlign="center"
-        mb={8}
-        color={colors.darkBrown}
-      >
-        Zahtevi za časove
-      </Text>
-      <Table.Root align="center" maxWidth="60%">
-        <Table.Header>
-          <Table.Row background={colors.cream} textAlign={"center"}>
-            <Table.ColumnHeader textAlign={"center"}></Table.ColumnHeader>
-            <Table.ColumnHeader textAlign={"center"}>
-              Ime i prezime
-            </Table.ColumnHeader>
-            <Table.ColumnHeader textAlign={"center"}>Datum</Table.ColumnHeader>
-            <Table.ColumnHeader textAlign={"center"}>Vreme</Table.ColumnHeader>
-            <Table.ColumnHeader textAlign={"center"}>
-              Trajanje
-            </Table.ColumnHeader>
-            <Table.ColumnHeader></Table.ColumnHeader>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
+    <Flex className="requests-section">
+      <Text className="requests-heading">Zahtevi za časove</Text>
+
+      <table className="requests-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Ime i prezime</th>
+            <th>Datum</th>
+            <th>Vreme</th>
+            <th>Trajanje</th>
+            <th>Akcija</th>
+          </tr>
+        </thead>
+        <tbody>
           {zahtevi.map((z, i) => (
-            <Table.Row key={i} background={colors.cream}>
-              <Table.Cell textAlign={"center"}>{i + 1}.</Table.Cell>
-              <Table.Cell textAlign={"center"}>{z.ime}</Table.Cell>
-              <Table.Cell textAlign={"center"}>{z.datum}</Table.Cell>
-              <Table.Cell textAlign={"center"}>{z.vreme}</Table.Cell>
-              <Table.Cell textAlign={"center"}>{z.trajanje}</Table.Cell>
-              <Table.Cell textAlign={"center"}>
-                <Flex justify="center" gap={3}>
+            <tr key={i}>
+              <td>{i + 1}.</td>
+              <td>{z.ime}</td>
+              <td>{z.datum}</td>
+              <td>{z.vreme}</td>
+              <td>{z.trajanje}</td>
+              <td>
+                <div className="requests-actions">
                   <IoIosCheckmarkCircle
                     aria-label="Odobri"
-                    size="40px"
+                    size="32px"
                     color="green"
                   />
                   <IoIosCloseCircle
                     aria-label="Odbij"
+                    size="32px"
                     color="red"
-                    size="40px"
                   />
-                </Flex>
-              </Table.Cell>
-            </Table.Row>
+                </div>
+              </td>
+            </tr>
           ))}
-        </Table.Body>
-      </Table.Root>
+        </tbody>
+      </table>
     </Flex>
   );
 };
 
 function RequestsPage() {
   return (
-    <Box display="flex" flexDirection="column" minHeight="100vh" width="100vw">
+    <Box className="requests-wrapper">
       <NavBar />
       <RequestsPageSection />
     </Box>

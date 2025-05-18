@@ -8,12 +8,12 @@ import {
   Input,
   Text,
 } from "@chakra-ui/react";
-import { colors } from "../constants";
-import NavBar from "../components/Navbar";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useState } from "react";
+import NavBar from "../components/Navbar";
 import { loginApi } from "../api/auth";
 import { useAuth } from "../context/AuthContext";
+import "./css/AuthPage.css";
 
 const LoginPageSection = () => {
   const [username, setUsername] = useState("");
@@ -23,63 +23,26 @@ const LoginPageSection = () => {
   const { login } = useAuth();
 
   const handleLogin = async () => {
-    if (!username.length || !password.length) {
+    if (!username || !password) {
       setErrorMessage("Sva polja su obavezna.");
       return;
     }
     try {
-      const token = await loginApi(username, password); // Your login API
-      login(token); // Save to context + localStorage
+      const token = await loginApi(username, password);
+      login(token);
       navigate("/pocetna");
-    } catch (err) {
+    } catch {
       setErrorMessage("Neuspešna prijava. Proverite korisničko ime i lozinku.");
     }
   };
 
   return (
-    <Flex
-      flex="1"
-      bg={colors.cream}
-      align={"center"}
-      direction={"column"}
-      p={8}
-      gap={8}
-      width="100%"
-    >
-      {/* Main Heading */}
-      {/*<Heading fontSize="5xl" fontWeight="bold" color="green.700" mb={2}>
-        JAKŠA
-      </Heading>*/}
+    <Flex className="authSection">
+      <Heading className="authHeading">Prijava</Heading>
 
-      {/* Subheading */}
-      <Heading fontSize="3xl" color={colors.darkBrown} mb={6}>
-        Prijava
-      </Heading>
+      <Box className="authForm">
+        {errorMessage && <Text className="authError">{errorMessage}</Text>}
 
-      {/* Registration Form */}
-      <Box
-        bg="transparent"
-        borderRadius="md"
-        width="100%"
-        maxW="400px"
-        display="flex"
-        flexDirection="column"
-        gap={3}
-      >
-        {/* Error message shown here */}
-        {errorMessage && (
-          <Text
-            color="red.500"
-            mt={2}
-            pb={3}
-            fontWeight="bold"
-            textAlign="center"
-          >
-            {errorMessage}
-          </Text>
-        )}
-
-        {/* Each input field */}
         {[
           {
             label: "Korisničko ime",
@@ -102,41 +65,22 @@ const LoginPageSection = () => {
                   type={field.type || "text"}
                   value={field.value}
                   onChange={field.onChange}
-                  borderColor={colors.darkBrown}
-                  _hover={{ borderColor: "gray.400" }}
-                  _focus={{ borderColor: "green.500", boxShadow: "none" }}
+                  className="authInput"
                 />
-                <Field.Label mt={-1} fontSize="sm" color={colors.darkBrown}>
-                  {field.label}
-                </Field.Label>
+                <Field.Label className="authLabel">{field.label}</Field.Label>
               </Field.Root>
             </Fieldset.Content>
           </Fieldset.Root>
         ))}
 
-        {/* Submit Button */}
-        <Button
-          mt={4}
-          bg={colors.brownNavbar}
-          color="white"
-          _hover={{ bg: "#5C4033" }}
-          borderRadius="full"
-          onClick={handleLogin}
-        >
+        <Button className="authButton" onClick={handleLogin}>
           Uloguj se
         </Button>
       </Box>
-      <Text color={colors.darkBrown}>
+
+      <Text className="authFooterText">
         Nemate nalog?{" "}
-        <Link
-          to="/registracija"
-          color="blue.300"
-          style={{
-            textDecoration: "underline",
-            color: colors.darkBrown,
-            fontWeight: "bold",
-          }}
-        >
+        <Link to="/registracija" className="authLink">
           Registrujte se
         </Link>
       </Text>
@@ -146,9 +90,9 @@ const LoginPageSection = () => {
 
 function LoginPage() {
   return (
-    <Box display="flex" flexDirection="column" minHeight="100vh" width="100vw">
-      <NavBar></NavBar>
-      <LoginPageSection></LoginPageSection>
+    <Box className="authWrapper">
+      <NavBar />
+      <LoginPageSection />
     </Box>
   );
 }

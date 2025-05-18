@@ -8,59 +8,66 @@ import {
   Input,
   Text,
 } from "@chakra-ui/react";
-import { colors } from "../constants";
-import NavBar from "../components/Navbar";
-import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import NavBar from "../components/Navbar";
 import { registerApi } from "../api/auth";
+import "./css/AuthPage.css";
 
 type ValidationRule = {
   regex: RegExp;
   message: string;
 };
 
-const SignUpPageSection = () => {
+const SignupPageSection = () => {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [username, setUsername] = useState("");
-
   const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+
   const [passwordError, setPasswordError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [phoneError, setPhoneError] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const navigate = useNavigate();
+
   const passwordRule: ValidationRule = {
     regex: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/,
     message:
       "Lozinka mora imati najmanje 6 karaktera, uključujući veliko i malo slovo i jedan broj.",
   };
 
-  const [email, setEmail] = useState("");
-  const [emailError, setEmailError] = useState("");
   const emailRule: ValidationRule = {
     regex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
     message: "Neispravna email adresa.",
   };
 
-  const [phone, setPhone] = useState("");
-  const [phoneError, setPhoneError] = useState("");
   const phoneRule: ValidationRule = {
     regex: /^[0-9]{6,15}$/,
     message: "Broj mora sadržati 6-15 cifara.",
   };
 
-  const [errorMessage, setErrorMessage] = useState("");
-  const navigate = useNavigate();
+  const validateField = (
+    value: string,
+    rule: ValidationRule,
+    setError: (msg: string) => void
+  ) => {
+    if (!rule.regex.test(value)) {
+      setError(rule.message);
+    } else {
+      setError("");
+    }
+  };
 
   const handleRegister = async () => {
-    if (
-      !firstname.length ||
-      !lastname.length ||
-      !username.length ||
-      !password.length ||
-      !email.length ||
-      !phone.length
-    ) {
+    if (!firstname || !lastname || !username || !password || !email || !phone) {
       setErrorMessage("Sva polja su obavezna.");
       return;
     }
+
     validateField(email, emailRule, setEmailError);
     validateField(password, passwordRule, setPasswordError);
     validateField(phone, phoneRule, setPhoneError);
@@ -74,69 +81,18 @@ const SignUpPageSection = () => {
       setErrorMessage("");
       await registerApi(firstname, lastname, username, password, email, phone);
       navigate("/prijava");
-    } catch (err) {
+    } catch {
       setErrorMessage("Došlo je do greške, pokušajte ponovo.");
     }
   };
 
-  const validateField = (
-    value: string,
-    rule: ValidationRule,
-    setError: (msg: string) => void
-  ) => {
-    if (!rule.regex.test(value)) {
-      setError(rule.message);
-      return;
-    }
-    setError(""); // No errors
-  };
-
-  //------------------------------------frontend-------------------------
-
   return (
-    <Flex
-      flex="1"
-      bg={colors.cream}
-      align={"center"}
-      direction={"column"}
-      p={8}
-      gap={8}
-      width="100%"
-    >
-      {/* Main Heading */}
-      {/*<Heading fontSize="5xl" fontWeight="bold" color="green.700" mb={2}>
-        JAKŠA
-      </Heading>*/}
+    <Flex className="authSection">
+      <Heading className="authHeading">Registracija</Heading>
 
-      {/* Subheading */}
-      <Heading fontSize="3xl" color={colors.darkBrown} mb={6}>
-        Registracija
-      </Heading>
+      <Box className="authForm">
+        {errorMessage && <Text className="authError">{errorMessage}</Text>}
 
-      {/* Registration Form */}
-      <Box
-        bg="transparent"
-        borderRadius="md"
-        width="100%"
-        maxW="400px"
-        display="flex"
-        flexDirection="column"
-        gap={3}
-      >
-        {/* Error message shown here */}
-        {errorMessage && (
-          <Text
-            color="red.500"
-            mt={2}
-            pb={3}
-            fontWeight="bold"
-            textAlign="center"
-          >
-            {errorMessage}
-          </Text>
-        )}
-
-        {/* Each input field */}
         {[
           {
             label: "Ime *",
@@ -196,50 +152,25 @@ const SignUpPageSection = () => {
                   type={field.type || "text"}
                   value={field.value}
                   onChange={field.onChange}
-                  borderColor={colors.darkBrown}
-                  _hover={{ borderColor: field.error ? "red.500" : "gray.400" }}
-                  _focus={{
-                    borderColor: field.error ? "red.500" : "green.500",
-                    boxShadow: "none",
-                  }}
+                  className={`authInput ${field.error ? "inputError" : ""}`}
                 />
-                <Field.Label mt={-1} fontSize="sm" color={colors.darkBrown}>
-                  {field.label}
-                </Field.Label>
-
+                <Field.Label className="authLabel">{field.label}</Field.Label>
                 {field.error && (
-                  <Text color="red.500" fontSize="xs" mt={1}>
-                    {field.error}
-                  </Text>
+                  <Text className="inputErrorMessage">{field.error}</Text>
                 )}
               </Field.Root>
             </Fieldset.Content>
           </Fieldset.Root>
         ))}
 
-        {/* Submit Button */}
-        <Button
-          mt={4}
-          bg={colors.brownNavbar}
-          color="white"
-          _hover={{ bg: "#5C4033" }}
-          borderRadius="full"
-          onClick={handleRegister}
-        >
+        <Button className="authButton" onClick={handleRegister}>
           Registruj se
         </Button>
       </Box>
-      <Text color={colors.darkBrown}>
+
+      <Text className="authFooterText">
         Imate nalog?{" "}
-        <Link
-          to="/prijava"
-          color="blue.300"
-          style={{
-            textDecoration: "underline",
-            color: colors.darkBrown,
-            fontWeight: "bold",
-          }}
-        >
+        <Link to="/prijava" className="authLink">
           Prijavite se
         </Link>
       </Text>
@@ -249,9 +180,9 @@ const SignUpPageSection = () => {
 
 function SignupPage() {
   return (
-    <Box display="flex" flexDirection="column" minHeight="100vh" width="100vw">
-      <NavBar></NavBar>
-      <SignUpPageSection></SignUpPageSection>
+    <Box className="authWrapper">
+      <NavBar />
+      <SignupPageSection />
     </Box>
   );
 }

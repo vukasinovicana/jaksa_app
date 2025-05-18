@@ -1,0 +1,35 @@
+.sliderContainer {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .sliderImage {
+    width: 100%;
+    max-width: 600px;
+    max-height: 300px;
+    object-fit: cover;
+  }
+  
+  .sliderButton {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #C4A484; 
+    color: white;
+    transition: background-color 0.2s ease;
+  }
+  
+  .sliderButton:hover {
+    background-color: #877358; 
+  }
+  
+  .prevButton {
+    left: 10px;
+  }
+  
+  .nextButton {
+    right: 10px;
+  }
+  

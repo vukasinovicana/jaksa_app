@@ -1,0 +1,27 @@
+.textBox {
+    text-align: left;
+    width: 100%;
+  }
+  
+  .textBox-title {
+    font-weight: bold;
+    color: #1E1E1E; 
+    font-size: clamp(1.25rem, 2.5vw, 2rem); /* responsive size (xl–3xl) */
+  }
+  
+  .textBox-text {
+    margin-top: 1rem;
+    font-size: clamp(0.875rem, 2vw, 1.125rem); /* sm–lg */
+    color: #1E1E1E; 
+  }
+  
+  .textBox-list {
+    margin-top: 1rem;
+  }
+  
+  .textBox-listItem {
+    font-size: clamp(0.875rem, 2vw, 1.125rem);
+    color: #3e2c23;
+    margin-bottom: 0.5rem;
+  }
+  

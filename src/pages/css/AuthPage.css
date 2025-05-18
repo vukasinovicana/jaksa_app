@@ -1,0 +1,96 @@
+.authWrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    width: 100vw;
+  }
+  
+  .authSection {
+    flex: 1;
+    background-color: #EFE4D7; 
+    align-items: center;
+    flex-direction: column;
+    padding: 2rem;
+    gap: 2rem;
+    width: 100%;
+    display: flex;
+  }
+  
+  .authHeading {
+    font-size: 2rem;
+    color: #1E1E1E; 
+    margin-bottom: 1.5rem;
+  }
+  
+  .authForm {
+    background-color: transparent;
+    border-radius: 0.5rem;
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .authError {
+    color: #e53e3e;
+    margin-top: 0.5rem;
+    padding-bottom: 1rem;
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  .authInput {
+    border-color: #1E1E1E;
+  }
+  
+  .authInput:hover {
+    border-color: #a0aec0;
+  }
+  
+  .authInput:focus {
+    border-color: #38a169 !important;
+    box-shadow: none !important;
+  }
+  
+  .inputError {
+    border-color: #e53e3e !important;
+  }
+  
+  .inputError:focus {
+    border-color: #e53e3e !important;
+  }
+  
+  .authLabel {
+    margin-top: -0.25rem;
+    font-size: 0.875rem;
+    color: #1E1E1E;
+  }
+  
+  .inputErrorMessage {
+    color: #e53e3e;
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+  }
+  
+  .authButton {
+    margin-top: 1rem;
+    background-color: #877358;
+    color: white;
+    border-radius: 9999px;
+  }
+  
+  .authButton:hover {
+    background-color: #1E1E1E;
+  }
+  
+  .authFooterText {
+    color: #1E1E1E;
+  }
+  
+  .authLink {
+    text-decoration: underline;
+    color: #1E1E1E;
+    font-weight: bold;
+  }
+  

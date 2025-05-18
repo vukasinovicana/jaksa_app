@@ -12,92 +12,55 @@ import {
   Flex,
   Textarea,
 } from "@chakra-ui/react";
-import React from "react";
-import { colors } from "../constants";
+import "./css/ContactForm.css";
 
 const ContactForm = () => {
   return (
-    <Flex
-      width="100%"
-      bg={colors.brownNavbar}
-      direction={{ base: "column", md: "row" }}
-      p={10}
-      gap={{ base: 6, md: 0 }} // Adds space ONLY in column layout
-    >
+    <Flex className="contactContainer">
       {/* Left - Contact Info */}
-      <Box flex="1">
-        <Heading
-          color="white"
-          mb={6}
-          fontSize={{ base: "xl", md: "2xl", lg: "3xl" }}
-        >
-          Kontakt
-        </Heading>
-        <VStack align="start" spacing={4} color="white">
+      <Box className="contactInfo">
+        <Heading className="contactHeading">Kontakt</Heading>
+        <VStack align="start" spacing={4} className="contactDetails">
           <Box>
-            <Text fontWeight="bold">Imejl adresa:</Text>
-            <Link
-              href="mailto:jaksa.vuk@gmail.com"
-              color="white"
-              textDecor="underline"
-            >
+            <Text className="contactLabel">Imejl adresa:</Text>
+            <Link href="mailto:jaksa.vuk@gmail.com" className="contactLink">
               jaksa.vuk@gmail.com
             </Link>
           </Box>
           <Box>
-            <Text fontWeight="bold">Telefon:</Text>
-            <Text>+381 637008595</Text>
+            <Text className="contactLabel">Telefon:</Text>
+            <Text className="contactText">+381 637008595</Text>
           </Box>
           <Box>
-            <Text fontWeight="bold">Adresa:</Text>
-            <Text>Bul. Despota Stefana 45</Text>
+            <Text className="contactLabel">Adresa:</Text>
+            <Text className="contactText">Bul. Despota Stefana 45</Text>
           </Box>
         </VStack>
       </Box>
 
       {/* Right - Form */}
-      <Box flex="1">
+      <Box className="contactForm">
         <VStack gap={4} align="stretch">
           <Fieldset.Root>
             <Fieldset.Content>
               <HStack gap={4}>
                 <Field.Root>
-                  <Field.Label mt={-1} fontSize="sm" color={colors.cream}>
-                    Ime:
-                  </Field.Label>
-                  <Input
-                    type={"text"}
-                    borderColor={colors.cream}
-                    bg={colors.cream}
-                  />
+                  <Field.Label className="formLabel">Ime:</Field.Label>
+                  <Input type="text" className="formInput" />
                 </Field.Root>
                 <Field.Root>
-                  <Field.Label mt={-1} fontSize="sm" color={colors.cream}>
-                    Prezime:
-                  </Field.Label>
-                  <Input
-                    type={"text"}
-                    borderColor={colors.cream}
-                    bg={colors.cream}
-                  />
+                  <Field.Label className="formLabel">Prezime:</Field.Label>
+                  <Input type="text" className="formInput" />
                 </Field.Root>
               </HStack>
               <Field.Root>
-                <Field.Label mt={-1} fontSize="sm" color={colors.cream}>
-                  Tekst:
-                </Field.Label>
-                <Textarea
-                  variant="outline"
-                  bg={colors.cream}
-                  borderColor={colors.cream}
-                />
+                <Field.Label className="formLabel">Tekst:</Field.Label>
+                <Textarea className="formInput" />
               </Field.Root>
             </Fieldset.Content>
           </Fieldset.Root>
 
-          <Button alignSelf="center" bg="#f6e9da" color="#333" px={8}>
-            Pošalji
-          </Button>
+          <Button className="submitButton">Pošalji</Button>
         </VStack>
       </Box>
     </Flex>

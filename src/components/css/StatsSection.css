@@ -1,0 +1,22 @@
+.statsGrid {
+    gap: 0;
+    background-color: #b89f7c;
+    width: 100%;
+    box-shadow: 0px -2px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .statBox {
+    padding: 1.5rem; 
+    text-align: center;
+    color: white;
+  }
+  
+  .statValue {
+    font-size: 1.5rem; /* Chakra's 2xl */
+    font-weight: bold;
+  }
+  
+  .statLabel {
+    font-size: 1.125rem; /* Chakra's lg */
+  }
+  

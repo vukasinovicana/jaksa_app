@@ -1,8 +1,8 @@
 import React from "react";
-import { Box, Flex, List, Text } from "@chakra-ui/react";
-import { colors } from "../constants";
+import { Box, List, Text } from "@chakra-ui/react";
+import "./css/TextBox.css"; // ✅ Import the CSS file
 
-type point = {
+type Point = {
   label: string;
   content: string;
 };
@@ -10,35 +10,19 @@ type point = {
 type TextBoxProps = {
   title: string;
   text: string;
-  points?: point[];
+  points?: Point[];
 };
 
 const TextBox = ({ title, text, points = [] }: TextBoxProps) => {
   return (
-    <Box textAlign="left" width="100%">
-      <Text
-        fontSize={{ base: "xl", md: "2xl", lg: "3xl" }}
-        fontWeight="bold"
-        color={colors.darkBrown}
-      >
-        {title}
-      </Text>
-      <Text
-        fontSize={{ base: "sm", md: "md", lg: "lg" }}
-        mt={4}
-        color={colors.darkBrown}
-      >
-        {text}
-      </Text>
+    <Box className="textBox">
+      <Text className="textBox-title">{title}</Text>
+      <Text className="textBox-text">{text}</Text>
       {points.length > 0 && (
-        <List.Root>
+        <List.Root className="textBox-list">
           {points.map((item, index) => (
-            <List.Item
-              fontSize={{ base: "sm", md: "md", lg: "lg" }}
-              color={colors.darkBrown}
-            >
-              <b>{item.label}</b>
-              {item.content}
+            <List.Item key={index} className="textBox-listItem">
+              <b>{item.label}</b> {item.content}
             </List.Item>
           ))}
         </List.Root>

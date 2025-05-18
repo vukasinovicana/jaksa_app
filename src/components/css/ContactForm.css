@@ -1,0 +1,79 @@
+.contactContainer {
+    width: 100%;
+    background-color: #877358; /* brownNavbar */
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  @media (min-width: 768px) {
+    .contactContainer {
+      flex-direction: row;
+      gap: 0;
+    }
+  }
+  
+  .contactInfo {
+    flex: 1;
+    color: white;
+  }
+  
+  .contactHeading {
+    color: white;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+  }
+  
+  @media (min-width: 768px) {
+    .contactHeading {
+      font-size: 2rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .contactHeading {
+      font-size: 2.25rem;
+    }
+  }
+  
+  .contactDetails {
+    color: white;
+  }
+  
+  .contactLabel {
+    font-weight: bold;
+  }
+  
+  .contactLink {
+    color: white;
+    text-decoration: underline;
+  }
+  
+  .contactText {
+    color: white;
+  }
+  
+  .contactForm {
+    flex: 1;
+  }
+  
+  .formLabel {
+    margin-top: -0.25rem;
+    font-size: 0.875rem;
+    color: #ede0d4; /* cream */
+  }
+  
+  .formInput {
+    background-color: #ede0d4; /* cream */
+    border: 1px solid #ede0d4;
+  }
+  
+  .submitButton {
+    align-self: center;
+    background-color: #f6e9da;
+    color: #333;
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+  

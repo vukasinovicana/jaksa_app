@@ -1,0 +1,53 @@
+/* RequestsPage.css */
+
+.requests-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    width: 100vw;
+    background-color: #EFE4D7;
+  }
+  
+  .requests-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    gap: 2rem;
+    width: 100%;
+  }
+  
+  .requests-heading {
+    font-size: 1.75rem;
+    font-weight: bold;
+    text-align: center;
+    color: #1E1E1E;
+  }
+  
+  .requests-table {
+    width: 100%;
+    max-width: 960px;
+    border-collapse: collapse;
+  }
+  
+  .requests-table th,
+  .requests-table td {
+    text-align: center;
+    padding: 0.75rem;
+    border-bottom: 1px solid #ddd;
+    background-color: #EFE4D7;
+    color: #1E1E1E;
+  }
+  
+  .requests-table th {
+    font-weight: bold;
+    background-color: #fdf6ec;
+  }
+  
+  .requests-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+  }
+  
