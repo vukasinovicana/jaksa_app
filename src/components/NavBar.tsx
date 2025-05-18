@@ -5,15 +5,23 @@ import {
   useBreakpointValue,
   Menu,
   Portal,
+  Box,
 } from "@chakra-ui/react";
 import { FaBars, FaPhone, FaUser } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { colors } from "../constants";
+import { useAuth } from "../context/AuthContext";
 
 function NavBar() {
   // Control visibility based on screen size
   const isMobile = useBreakpointValue({ base: true, md: false });
   const navigate = useNavigate();
+  const { isAuthenticated, logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+  };
+
   return (
     <Flex
       bg={colors.brownNavbar}
@@ -49,21 +57,25 @@ function NavBar() {
             <Portal>
               <Menu.Positioner>
                 <Menu.Content>
+                  {isAuthenticated && (
+                    <>
+                      <Menu.Item
+                        _hover={{ bg: colors.cream }}
+                        onClick={() => navigate("/zahtevi")}
+                      >
+                        Zahtevi
+                      </Menu.Item>
+                      <Menu.Item
+                        _hover={{ bg: colors.cream }}
+                        onClick={() => navigate("/raspored")}
+                      >
+                        Raspored časova
+                      </Menu.Item>
+                    </>
+                  )}
                   <Menu.Item
                     _hover={{ bg: colors.cream }}
-                    onClick={() => navigate("/zahtevi")}
-                  >
-                    Zahtevi
-                  </Menu.Item>
-                  <Menu.Item
-                    _hover={{ bg: colors.cream }}
-                    onClick={() => navigate("/raspored")}
-                  >
-                    Raspored casova
-                  </Menu.Item>
-                  <Menu.Item
-                    _hover={{ bg: colors.cream }}
-                    onClick={() => navigate("/")}
+                    onClick={() => navigate("/pocetna")}
                   >
                     Početna
                   </Menu.Item>
@@ -73,43 +85,68 @@ function NavBar() {
                   >
                     O meni
                   </Menu.Item>
-                  <Menu.Item
-                    _hover={{ bg: colors.cream }}
-                    onClick={() => navigate("/prijava")}
-                  >
-                    Logovanje
-                  </Menu.Item>
-                  <Menu.Item
-                    _hover={{ bg: colors.cream }}
-                    onClick={() => navigate("/registracija")}
-                  >
-                    Registracija
-                  </Menu.Item>
-                  <Menu.Item
-                    _hover={{ bg: colors.cream }}
-                    onClick={() => navigate("/mojProfil")}
-                  >
-                    Moj profil
-                  </Menu.Item>
+                  {!isAuthenticated && (
+                    <>
+                      <Menu.Item
+                        _hover={{ bg: colors.cream }}
+                        onClick={() => navigate("/prijava")}
+                      >
+                        Logovanje
+                      </Menu.Item>
+                      <Menu.Item
+                        _hover={{ bg: colors.cream }}
+                        onClick={() => navigate("/registracija")}
+                      >
+                        Registracija
+                      </Menu.Item>
+                    </>
+                  )}
+                  {isAuthenticated && (
+                    <>
+                      <Menu.Item
+                        _hover={{ bg: colors.cream }}
+                        onClick={() => navigate("/mojProfil")}
+                      >
+                        Moj profil
+                      </Menu.Item>
+                      <Menu.Item
+                        _hover={{ bg: colors.cream }}
+                        onClick={handleLogout}
+                      >
+                        Odjavi se
+                      </Menu.Item>
+                    </>
+                  )}
                 </Menu.Content>
               </Menu.Positioner>
             </Portal>
           </Menu.Root>
         ) : (
-          <HStack spacing={10}>
+          <HStack gap={25}>
+            {isAuthenticated && (
+              <>
+                <Link
+                  to={"/zahtevi"}
+                  style={{ textDecoration: "none", color: "inherit" }}
+                >
+                  Zahtevi
+                </Link>
+                <Link
+                  to={"/raspored"}
+                  style={{ textDecoration: "none", color: "inherit" }}
+                >
+                  <Box textAlign="center" lineHeight="1.2">
+                    Raspored
+                    <br />
+                    časova
+                  </Box>
+                </Link>{" "}
+              </>
+            )}
             <Link
-              to={"/zahtevi"}
+              to={"/pocetna"}
               style={{ textDecoration: "none", color: "inherit" }}
             >
-              Zahtevi
-            </Link>
-            <Link
-              to={"/raspored"}
-              style={{ textDecoration: "none", color: "inherit" }}
-            >
-              Raspored casova
-            </Link>
-            <Link to={"/"} style={{ textDecoration: "none", color: "inherit" }}>
               Početna
             </Link>
             <Link
@@ -125,24 +162,38 @@ function NavBar() {
               <Portal>
                 <Menu.Positioner>
                   <Menu.Content>
-                    <Menu.Item
-                      _hover={{ bg: colors.cream }}
-                      onClick={() => navigate("/prijava")}
-                    >
-                      Logovanje
-                    </Menu.Item>
-                    <Menu.Item
-                      _hover={{ bg: colors.cream }}
-                      onClick={() => navigate("/registracija")}
-                    >
-                      Registracija
-                    </Menu.Item>
-                    <Menu.Item
-                      _hover={{ bg: colors.cream }}
-                      onClick={() => navigate("/mojProfil")}
-                    >
-                      Moj Profil
-                    </Menu.Item>
+                    {!isAuthenticated && (
+                      <>
+                        <Menu.Item
+                          _hover={{ bg: colors.cream }}
+                          onClick={() => navigate("/prijava")}
+                        >
+                          Logovanje
+                        </Menu.Item>
+                        <Menu.Item
+                          _hover={{ bg: colors.cream }}
+                          onClick={() => navigate("/registracija")}
+                        >
+                          Registracija
+                        </Menu.Item>
+                      </>
+                    )}
+                    {isAuthenticated && (
+                      <>
+                        <Menu.Item
+                          _hover={{ bg: colors.cream }}
+                          onClick={() => navigate("/mojProfil")}
+                        >
+                          Moj Profil
+                        </Menu.Item>
+                        <Menu.Item
+                          _hover={{ bg: colors.cream }}
+                          onClick={handleLogout}
+                        >
+                          Odjavi se
+                        </Menu.Item>
+                      </>
+                    )}
                   </Menu.Content>
                 </Menu.Positioner>
               </Portal>

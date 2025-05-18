@@ -7,18 +7,40 @@ import SignupPage from "./pages/SignupPage";
 import ProfilePage from "./pages/ProfilePage";
 import RequestsPage from "./pages/RequestsPage";
 import SchedulePage from "./pages/SchedulePage";
+import ProtectedRoute from "./ProtectedRoute";
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<HomePage />} />
+      <Route path="/pocetna" element={<HomePage />} />
       <Route path="/oMeni" element={<AboutPage />} />
+      <Route path="/" element={<LoginPage />} />
       <Route path="/prijava" element={<LoginPage />} />
       <Route path="/registracija" element={<SignupPage />} />
-      <Route path="/mojProfil" element={<ProfilePage />} />
-      <Route path="/zahtevi" element={<RequestsPage />} />
-      <Route path="/raspored" element={<SchedulePage />} />
-
+      <Route
+        path="/mojProfil"
+        element={
+          <ProtectedRoute>
+            <ProfilePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/zahtevi"
+        element={
+          <ProtectedRoute>
+            <RequestsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/raspored"
+        element={
+          <ProtectedRoute>
+            <SchedulePage />
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   );
 }
