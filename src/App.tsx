@@ -8,6 +8,7 @@ import ProfilePage from "./pages/ProfilePage";
 import RequestsPage from "./pages/RequestsPage";
 import SchedulePage from "./pages/SchedulePage";
 import ProtectedRoute from "./ProtectedRoute";
+import ChangePasswordPage from "./pages/ChangePasswordPage";
 
 function App() {
   return (
@@ -22,6 +23,14 @@ function App() {
         element={
           <ProtectedRoute>
             <ProfilePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/promenaLozinke"
+        element={
+          <ProtectedRoute>
+            <ChangePasswordPage />
           </ProtectedRoute>
         }
       />

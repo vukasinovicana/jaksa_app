@@ -13,11 +13,12 @@ import { useNavigate, Link } from "react-router-dom";
 import NavBar from "../components/Navbar";
 import { registerApi } from "../api/auth";
 import "./css/AuthPage.css";
-
-type ValidationRule = {
-  regex: RegExp;
-  message: string;
-};
+import {
+  emailRule,
+  passwordRule,
+  phoneRule,
+  validateField,
+} from "../utils/validation";
 
 const SignupPageSection = () => {
   const [firstname, setFirstname] = useState("");
@@ -33,34 +34,6 @@ const SignupPageSection = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
-
-  const passwordRule: ValidationRule = {
-    regex: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/,
-    message:
-      "Lozinka mora imati najmanje 6 karaktera, uključujući veliko i malo slovo i jedan broj.",
-  };
-
-  const emailRule: ValidationRule = {
-    regex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-    message: "Neispravna email adresa.",
-  };
-
-  const phoneRule: ValidationRule = {
-    regex: /^[0-9]{6,15}$/,
-    message: "Broj mora sadržati 6-15 cifara.",
-  };
-
-  const validateField = (
-    value: string,
-    rule: ValidationRule,
-    setError: (msg: string) => void
-  ) => {
-    if (!rule.regex.test(value)) {
-      setError(rule.message);
-    } else {
-      setError("");
-    }
-  };
 
   const handleRegister = async () => {
     if (!firstname || !lastname || !username || !password || !email || !phone) {

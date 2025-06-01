@@ -39,7 +39,7 @@ function NavBar() {
         {isMobile ? (
           <Menu.Root>
             <Menu.Trigger asChild>
-              <FaBars size={24} />
+              <FaBars size={24} cursor="pointer" />
             </Menu.Trigger>
             <Portal>
               <Menu.Positioner>
@@ -129,7 +129,7 @@ function NavBar() {
             </Link>
             <Menu.Root>
               <Menu.Trigger asChild>
-                <FaUser size={24} color="white" />
+                <FaUser size={24} color="white" cursor="pointer" />
               </Menu.Trigger>
               <Portal>
                 <Menu.Positioner>
