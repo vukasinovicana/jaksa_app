@@ -8,7 +8,7 @@ import {
   Box,
 } from "@chakra-ui/react";
 import { FaBars, FaPhone, FaUser } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 import "./css/NavBar.css"; // Import the CSS file
@@ -106,27 +106,43 @@ function NavBar() {
             </Portal>
           </Menu.Root>
         ) : (
-          <HStack gap={25}>
+          <HStack gap={30}>
             {isAuthenticated && (
               <>
-                <Link to="/zahtevi" className="navLink">
+                <NavLink
+                  to="/zahtevi"
+                  className={({ isActive }) =>
+                    `navLink ${isActive ? "active" : ""}`
+                  }
+                >
                   Zahtevi
-                </Link>
-                <Link to="/raspored" className="navLink">
-                  <Box textAlign="center" lineHeight="1.2">
-                    Raspored
-                    <br />
-                    časova
-                  </Box>
-                </Link>
+                </NavLink>
+                <NavLink
+                  to="/raspored"
+                  className={({ isActive }) =>
+                    `navLink ${isActive ? "active" : ""}`
+                  }
+                >
+                  <Box textAlign="center">Raspored časova</Box>
+                </NavLink>
               </>
             )}
-            <Link to="/pocetna" className="navLink">
+            <NavLink
+              to="/pocetna"
+              className={({ isActive }) =>
+                `navLink ${isActive ? "active" : ""}`
+              }
+            >
               Početna
-            </Link>
-            <Link to="/oMeni" className="navLink">
-              O meni
-            </Link>
+            </NavLink>
+            <NavLink
+              to="/oMeni"
+              className={({ isActive }) =>
+                `navLink ${isActive ? "active" : ""}`
+              }
+            >
+              <Box textAlign="center">O meni</Box>
+            </NavLink>
             <Menu.Root>
               <Menu.Trigger asChild>
                 <FaUser size={24} color="white" cursor="pointer" />

@@ -29,3 +29,7 @@
     background-color: #EFE4D7; 
   }
   
+  .navLink.active {
+    color: #1E1E1E;
+    font-weight: bold;
+  }

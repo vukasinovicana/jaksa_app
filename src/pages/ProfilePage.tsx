@@ -16,11 +16,14 @@ import { useEffect, useState } from "react";
 import { fetchUser, updateUser } from "../api/user";
 import { User } from "../types/User";
 import { Link } from "react-router-dom";
+import { phoneRule, validateField } from "../utils/validation";
+import { AxiosError } from "axios";
 
 const ProfilePageSection = () => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [phoneError, setPhoneError] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   const [editableField, setEditableField] = useState<string | null>(null);
@@ -47,13 +50,19 @@ const ProfilePageSection = () => {
   };
 
   const handleInputChange = (field: keyof User, value: string) => {
+    if (field == "phone") {
+      validateField(value, phoneRule, setPhoneError);
+    }
     if (!editedUser) return;
     setEditedUser({ ...editedUser, [field]: value });
   };
 
   const handleSaveClick = async () => {
     if (!editedUser) return;
-
+    if (phoneError) {
+      setErrorMessage("Ispravite greške u formi.");
+      return;
+    }
     setSaving(true);
     try {
       // Send only editable fields you want to update
@@ -68,14 +77,20 @@ const ProfilePageSection = () => {
       // On success, update user and disable editing
       setUser(editedUser);
       setEditableField(null);
-    } catch (error) {
-      setErrorMessage("Greška prilikom čuvanja promena.");
+    } catch (err) {
+      const error = err as AxiosError;
+      const backendMessage = error?.response?.data;
+      setErrorMessage(
+        typeof backendMessage === "string"
+          ? backendMessage
+          : "Došlo je do greške, pokušajte ponovo."
+      );
     } finally {
       setSaving(false);
     }
   };
 
-  if (loading) {
+  if (loading || saving) {
     return (
       <Flex className="authSection" justify="center" align="center">
         <Spinner size="xl" color={colors.darkBrown} />
@@ -94,11 +109,11 @@ const ProfilePageSection = () => {
   }
 
   const profileFields = [
-    { label: "Ime", key: "firstname" },
-    { label: "Prezime", key: "lastname" },
-    { label: "Email", key: "email" },
-    { label: "Broj telefona", key: "phone" },
-    { label: "Korisničko ime", key: "username" },
+    { label: "Email", key: "email", error: null },
+    { label: "Korisničko ime", key: "username", error: null },
+    { label: "Ime", key: "firstname", error: null },
+    { label: "Prezime", key: "lastname", error: null },
+    { label: "Broj telefona", key: "phone", error: phoneError },
     // Password excluded from edit for now
   ] as const;
 
@@ -106,25 +121,34 @@ const ProfilePageSection = () => {
     <Flex className="authSection">
       <Heading className="authHeading">Moj profil</Heading>
 
-      <Box className="authForm">
+      <form
+        className="authForm"
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSaveClick();
+        }}
+      >
         {errorMessage && <Text className="authError">{errorMessage}</Text>}
 
         {profileFields.map((field, index) => (
           <fieldset key={index} className="authFieldset">
             <div className="authInputGroup">
+              <label className="authLabel">{field.label}</label>
               <InputGroup
                 endElement={
-                  <FaPen
-                    color={colors.darkBrown}
-                    cursor="pointer"
-                    onClick={() => handleEditClick(field.key)}
-                  />
+                  field.key !== "username" && field.key !== "email" ? (
+                    <FaPen
+                      color={colors.darkBrown}
+                      cursor="pointer"
+                      onClick={() => handleEditClick(field.key)}
+                    />
+                  ) : null
                 }
               >
                 <Input
                   type="text"
                   value={editedUser[field.key]}
-                  className="authInput"
+                  className={`authInput ${field.error ? "inputError" : ""}`}
                   background={colors.darkCream}
                   _placeholder={{ color: colors.darkBrown }}
                   disabled={editableField !== field.key}
@@ -132,18 +156,16 @@ const ProfilePageSection = () => {
                   onBlur={() => setEditableField(null)}
                 />
               </InputGroup>
-              <label className="authLabel">{field.label}</label>
+              {field.error && (
+                <p className="inputErrorMessage">{field.error}</p>
+              )}
             </div>
           </fieldset>
         ))}
-        <Button
-          className="authButton"
-          onClick={handleSaveClick}
-          disabled={saving}
-        >
+        <Button className="authButton" type="submit" disabled={saving}>
           {saving ? "Čuvanje..." : "Sačuvaj"}
         </Button>
-      </Box>
+      </form>
       <Text className="authFooterText">
         <Link to="/promenaLozinke" className="authLink">
           Promeni lozinku

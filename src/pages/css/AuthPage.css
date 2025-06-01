@@ -65,6 +65,7 @@
     margin-top: -0.25rem;
     font-size: 0.875rem;
     color: #1E1E1E;
+    font-weight: bold;
   }
   
   .inputErrorMessage {
@@ -92,5 +93,13 @@
     text-decoration: underline;
     color: #1E1E1E;
     font-weight: bold;
+  }
+
+  .password-toggle-button {
+    background: transparent;
+    color: #1E1E1E;
+    cursor: pointer;
+    padding: 0;
+    border: none;
   }
   

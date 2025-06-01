@@ -6,6 +6,8 @@ import {
   Flex,
   Heading,
   Input,
+  InputGroup,
+  Spinner,
   Text,
 } from "@chakra-ui/react";
 import { useState } from "react";
@@ -19,6 +21,9 @@ import {
   phoneRule,
   validateField,
 } from "../utils/validation";
+import { colors } from "../constants";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { AxiosError } from "axios";
 
 const SignupPageSection = () => {
   const [firstname, setFirstname] = useState("");
@@ -28,12 +33,17 @@ const SignupPageSection = () => {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
 
+  const [show, setShow] = useState(false);
+  const [saving, setSaving] = useState(false);
+
   const [passwordError, setPasswordError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [phoneError, setPhoneError] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
+
+  const handleToggle = () => setShow(!show);
 
   const handleRegister = async () => {
     if (!firstname || !lastname || !username || !password || !email || !phone) {
@@ -51,19 +61,42 @@ const SignupPageSection = () => {
     }
 
     try {
+      setSaving(true);
       setErrorMessage("");
       await registerApi(firstname, lastname, username, password, email, phone);
       navigate("/prijava");
-    } catch {
-      setErrorMessage("Došlo je do greške, pokušajte ponovo.");
+    } catch (err) {
+      const error = err as AxiosError;
+      const backendMessage = error?.response?.data;
+      setErrorMessage(
+        typeof backendMessage === "string"
+          ? backendMessage
+          : "Došlo je do greške, pokušajte ponovo."
+      );
+    } finally {
+      setSaving(false);
     }
   };
+
+  if (saving) {
+    return (
+      <Flex className="authSection" justify="center" align="center">
+        <Spinner size="xl" color={colors.darkBrown} />
+      </Flex>
+    );
+  }
 
   return (
     <Flex className="authSection">
       <Heading className="authHeading">Registracija</Heading>
 
-      <Box className="authForm">
+      <form
+        className="authForm"
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleRegister();
+        }}
+      >
         {errorMessage && <Text className="authError">{errorMessage}</Text>}
 
         {[
@@ -88,13 +121,14 @@ const SignupPageSection = () => {
           {
             label: "Lozinka *",
             value: password,
-            type: "password",
+            type: show ? "text" : "password",
             onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
               const val = e.target.value;
               setPassword(val);
               validateField(val, passwordRule, setPasswordError);
             },
             error: passwordError,
+            key: "password",
           },
           {
             label: "Email *",
@@ -120,26 +154,38 @@ const SignupPageSection = () => {
         ].map((field, index) => (
           <Fieldset.Root key={index}>
             <Fieldset.Content>
-              <Field.Root>
-                <Input
-                  type={field.type || "text"}
-                  value={field.value}
-                  onChange={field.onChange}
-                  className={`authInput ${field.error ? "inputError" : ""}`}
-                />
+              <Field.Root invalid={!!field.error}>
                 <Field.Label className="authLabel">{field.label}</Field.Label>
-                {field.error && (
-                  <Text className="inputErrorMessage">{field.error}</Text>
-                )}
+                <InputGroup
+                  endElement={
+                    field.key == "password" ? (
+                      <Button
+                        onClick={handleToggle}
+                        className="password-toggle-button"
+                      >
+                        {show ? <FaEyeSlash /> : <FaEye />}
+                      </Button>
+                    ) : null
+                  }
+                >
+                  <Input
+                    type={field.type || "text"}
+                    value={field.value}
+                    onChange={field.onChange}
+                    className={`authInput ${field.error ? "inputError" : ""}`}
+                  />
+                </InputGroup>
+
+                <Field.ErrorText>{field.error}</Field.ErrorText>
               </Field.Root>
             </Fieldset.Content>
           </Fieldset.Root>
         ))}
 
-        <Button className="authButton" onClick={handleRegister}>
+        <Button className="authButton" type="submit">
           Registruj se
         </Button>
-      </Box>
+      </form>
 
       <Text className="authFooterText">
         Imate nalog?{" "}
