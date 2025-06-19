@@ -6,7 +6,7 @@ import tata_profilna from "../assets/tata_profilna.jpg";
 import { ImageSlider } from "../components/ImageSlider";
 import TextBox from "../components/TextBox";
 import ContactForm from "../components/ContactForm";
-import "./css/AboutPage.css"; // 👈 import CSS
+import "./css/AboutPage.css";
 
 const images = [tata_profilna, slika_sa_djacima];
 
