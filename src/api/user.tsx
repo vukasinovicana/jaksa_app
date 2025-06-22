@@ -1,6 +1,17 @@
 import axios from "axios";
 import { User } from "../types/User";
 
+export const fetchAllUsers = async (): Promise<User[]> => {
+  const token = localStorage.getItem("token");
+  const res = await axios.get("http://localhost:8080/api/user/allUsers", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return res.data;
+};
+
 export const fetchUser = async (): Promise<User> => {
   const token = localStorage.getItem("token");
   const res = await axios.get("http://localhost:8080/api/user/me", {

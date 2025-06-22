@@ -36,7 +36,7 @@ const ProfilePageSection = () => {
         setUser(data);
         setEditedUser(data); // Copy for local editing
       } catch (error) {
-        console.error("Failed to fetch user", error);
+        console.error("Došlo je do greške.", error);
       } finally {
         setLoading(false);
       }

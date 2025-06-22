@@ -5,6 +5,7 @@ export interface Class {
   date: string; // ISO format like "2025-04-21"
   timeStart: string; //hh:mm
   timeEnd: string;
+  duration: string;
   description?: string;
   student: User;
 }

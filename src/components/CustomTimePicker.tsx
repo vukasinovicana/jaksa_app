@@ -2,10 +2,21 @@ import React, { useState } from "react";
 import { Menu, Button, Flex, Text, Portal } from "@chakra-ui/react";
 import { FaClock } from "react-icons/fa";
 
-export function CustomTimePicker() {
-  const [hour, setHour] = useState("12");
-  const [minute, setMinute] = useState("00");
+interface CustomTimePickerProps {
+  hour: string;
+  setHour: (date: string) => void;
+  minute: string;
+  setMinute: (date: string) => void;
+  disabled: boolean;
+}
 
+export function CustomTimePicker({
+  hour,
+  setHour,
+  minute,
+  setMinute,
+  disabled,
+}: CustomTimePickerProps) {
   const hours = Array.from({ length: 24 }, (_, i) =>
     i.toString().padStart(2, "0")
   );
@@ -26,6 +37,7 @@ export function CustomTimePicker() {
               color="#1E1E1E"
               border="1px solid"
               borderColor="#1E1E1E"
+              disabled={disabled}
             >
               {hour}
             </Button>
@@ -54,6 +66,7 @@ export function CustomTimePicker() {
               color="#1E1E1E"
               border="1px solid"
               borderColor="#1E1E1E"
+              disabled={disabled}
             >
               {minute}
             </Button>

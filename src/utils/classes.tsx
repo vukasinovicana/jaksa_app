@@ -1,18 +1,19 @@
 import { Class } from "../types/Class";
 
-const classes: Class[] = [
+export const classes: Class[] = [
   {
     id: 1,
     date: "2025-06-20",
     timeStart: "09:00",
     timeEnd: "10:00",
+    duration: "1",
     description: "Matematika - priprema za test",
     student: {
-      firstname: "Marko",
-      lastname: "Markovic",
+      firstname: "Ana",
+      lastname: "Vukasinovic",
       email: "marko.markovic@example.com",
       phone: "+381601234567",
-      username: "markoM",
+      username: "anvu",
     },
   },
   {
@@ -20,13 +21,14 @@ const classes: Class[] = [
     date: "2025-06-21",
     timeStart: "14:30",
     timeEnd: "15:30",
-    description: "Vezbanje integrala",
+    duration: "1",
+    description: "Vezbanje integrala 2",
     student: {
-      firstname: "Jelena",
-      lastname: "Jovanovic",
-      email: "jelena.jovanovic@example.com",
-      phone: "+381601112233",
-      username: "jelenaJ",
+      firstname: "Ana",
+      lastname: "Vukasinovic",
+      email: "marko.markovic@example.com",
+      phone: "+381601234567",
+      username: "anvu",
     },
   },
   {
@@ -34,6 +36,8 @@ const classes: Class[] = [
     date: "2025-06-22",
     timeStart: "11:00",
     timeEnd: "12:00",
+    duration: "1",
+    description: " ",
     student: {
       firstname: "Ivan",
       lastname: "Petrovic",
@@ -47,6 +51,7 @@ const classes: Class[] = [
     date: "2025-06-23",
     timeStart: "16:00",
     timeEnd: "17:30",
+    duration: "1.5",
     description: "Kolokvijum 1",
     student: {
       firstname: "Ana",
@@ -61,6 +66,7 @@ const classes: Class[] = [
     date: "2025-06-24",
     timeStart: "08:00",
     timeEnd: "09:00",
+    duration: "1",
     student: {
       firstname: "Petar",
       lastname: "Savic",
@@ -74,7 +80,8 @@ const classes: Class[] = [
     date: "2025-06-20",
     timeStart: "14:30",
     timeEnd: "15:30",
-    description: "Vezbanje integrala",
+    duration: "1",
+    description: "Vezbanje integrala 1",
     student: {
       firstname: "Jelena",
       lastname: "Jovanovic",
@@ -88,6 +95,8 @@ const classes: Class[] = [
     date: "2025-06-20",
     timeStart: "11:00",
     timeEnd: "12:00",
+    duration: "1",
+    description: " ",
     student: {
       firstname: "Ivan",
       lastname: "Petrovic",
@@ -101,6 +110,7 @@ const classes: Class[] = [
     date: "2025-06-20",
     timeStart: "16:00",
     timeEnd: "17:30",
+    duration: "1.5",
     description: "Kolokvijum 1",
     student: {
       firstname: "Ana",

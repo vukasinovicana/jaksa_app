@@ -20,26 +20,29 @@ import { CustomTimePicker } from "./CustomTimePicker";
 import CustomDatePicker from "./CustomDatePicker";
 import { fetchAllUsers, fetchUser } from "../api/user";
 import { User } from "../types/User";
+import { Class } from "../types/Class";
 
-interface DialogWindowProps {
+interface DialogWindowClassProps {
   open: boolean;
   onOpen: () => void;
   onClose: () => void;
-  selectedDate: string;
-  setSelectedDate: (date: string) => void;
+  selectedClass: Class;
 }
 
-const DialogWindow = ({
+const DialogWindowClass = ({
   open,
   onOpen,
   onClose,
-  selectedDate,
-  setSelectedDate,
-}: DialogWindowProps) => {
+  selectedClass,
+}: DialogWindowClassProps) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [description, setDescription] = useState("");
-  const [hour, setHour] = useState("12");
-  const [minute, setMinute] = useState("00");
+  const [disabled, setDisabled] = useState(true);
+  const [date, setDate] = useState(selectedClass.date);
+  const [hour, setHour] = useState(selectedClass.timeStart.split(":")[0]);
+  const [minute, setMinute] = useState(selectedClass.timeStart.split(":")[1]);
+  const [duration, setDuration] = useState(selectedClass.duration);
+  const [student, setStudent] = useState(selectedClass.student);
+  const [description, setDescription] = useState(selectedClass.description);
   const [users, setUsers] = useState<User[] | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const userCollection = users
@@ -52,6 +55,18 @@ const DialogWindow = ({
         })),
       })
     : createListCollection({ items: [] });
+
+  useEffect(() => {
+    if (open && selectedClass) {
+      setDate(selectedClass.date);
+      setHour(selectedClass.timeStart.split(":")[0]);
+      setMinute(selectedClass.timeStart.split(":")[1]);
+      setDuration(selectedClass.duration);
+      setDescription(selectedClass.description);
+      setStudent(selectedClass.student); // add this line
+      setDisabled(true);
+    }
+  }, [open, selectedClass]);
 
   useEffect(() => {
     const loadData = async () => {
@@ -81,7 +96,6 @@ const DialogWindow = ({
             <CloseButton
               size="sm"
               onClick={() => {
-                setDescription("");
                 onClose();
               }}
               position="absolute"
@@ -95,7 +109,7 @@ const DialogWindow = ({
               }}
             />
             <Dialog.Header>
-              <Dialog.Title>Zakazivanje časa</Dialog.Title>
+              <Dialog.Title>Detalji časa</Dialog.Title>
             </Dialog.Header>
             <Dialog.Body>
               <Flex gap={6}>
@@ -105,14 +119,22 @@ const DialogWindow = ({
                     Datum:
                   </Text>
                   <CustomDatePicker
-                    selectedDate={selectedDate}
-                    setSelectedDate={setSelectedDate}
-                    disabled={false}
+                    selectedDate={date}
+                    setSelectedDate={setDate}
+                    disabled={disabled}
                   />
                   <Text fontWeight={"bold"} color={"#1E1E1E"} marginTop={3}>
                     Trajanje:
                   </Text>
-                  <RadioGroup.Root defaultValue="1">
+                  <RadioGroup.Root
+                    value={duration}
+                    onValueChange={(val: string) => {
+                      const actualValue =
+                        typeof val === "object" && val?.value ? val.value : val;
+                      setDuration(actualValue);
+                    }}
+                    disabled={disabled}
+                  >
                     <HStack gap="6" marginTop={1}>
                       <RadioGroup.Item value="1">
                         <RadioGroup.ItemHiddenInput />
@@ -132,33 +154,14 @@ const DialogWindow = ({
                       <Text fontWeight={"bold"} color={"#1E1E1E"} marginTop={3}>
                         Učenik:
                       </Text>
-                      <Select.Root
-                        collection={userCollection}
-                        size="sm"
-                        width="250px"
-                      >
-                        <Select.HiddenSelect />
-                        <Select.Control>
-                          <Select.Trigger>
-                            <Select.ValueText placeholder="Izaberi učenika" />
-                          </Select.Trigger>
-                          <Select.IndicatorGroup>
-                            <Select.Indicator />
-                          </Select.IndicatorGroup>
-                        </Select.Control>
-                        <Portal>
-                          <Select.Positioner>
-                            <Select.Content zIndex={2000}>
-                              {userCollection.items.map((item) => (
-                                <Select.Item key={item.value} item={item}>
-                                  {item.label}
-                                  <Select.ItemIndicator />
-                                </Select.Item>
-                              ))}
-                            </Select.Content>
-                          </Select.Positioner>
-                        </Portal>
-                      </Select.Root>
+                      <Text color={"#1E1E1E"}>
+                        {student.firstname +
+                          " " +
+                          student.lastname +
+                          " ( " +
+                          student.username +
+                          " )"}
+                      </Text>
                     </>
                   )}
                 </Flex>
@@ -170,12 +173,12 @@ const DialogWindow = ({
                     setHour={setHour}
                     minute={minute}
                     setMinute={setMinute}
-                    disabled={false}
+                    disabled={disabled}
                   />
                   <InputGroup
                     endElement={
                       <Span color="fg.muted" textStyle="xs">
-                        {description.length} / {100}
+                        {description?.length} / {100}
                       </Span>
                     }
                     marginTop={3}
@@ -190,6 +193,7 @@ const DialogWindow = ({
                       color="#1E1E1E"
                       border="1px solid"
                       borderColor="#1E1E1E"
+                      disabled={disabled}
                     />
                   </InputGroup>
                 </Flex>
@@ -199,12 +203,22 @@ const DialogWindow = ({
               <Button
                 onClick={() => {
                   setShowDatePicker(false);
+                  setDisabled(!disabled);
+                }}
+                variant="outline"
+                border="1px solid #1E1E1E"
+              >
+                Izmeni
+              </Button>
+              <Button
+                onClick={() => {
+                  setShowDatePicker(false);
                   onClose();
                 }}
                 variant="outline"
                 border="1px solid #1E1E1E"
               >
-                Pošalji zahtev
+                Otkaži
               </Button>
             </Dialog.Footer>
           </Dialog.Content>
@@ -214,4 +228,4 @@ const DialogWindow = ({
   );
 };
 
-export default DialogWindow;
+export default DialogWindowClass;

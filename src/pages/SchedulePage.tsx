@@ -17,14 +17,27 @@ import srLocale from "@fullcalendar/core/locales/sr"; // Serbian locale
 import "react-datepicker/dist/react-datepicker.css";
 import { useRef, useState } from "react";
 import DialogWindow from "../components/DialogWindow";
-import { calendarEvents } from "../utils/classes";
+import { calendarEvents, classes } from "../utils/classes";
 import "./css/SchedulePage.css";
+import DialogWindowClass from "../components/DialogWindowClass";
+import { Class } from "../types/Class";
 
 const SchedulePageSection = () => {
   const calendarRef = useRef<FullCalendar | null>(null);
-  const { open, onOpen, onClose } = useDisclosure();
+  const {
+    open: isDateOpen,
+    onOpen: onDateOpen,
+    onClose: onDateClose,
+  } = useDisclosure();
+  const {
+    open: isClassOpen,
+    onOpen: onClassOpen,
+    onClose: onClassClose,
+  } = useDisclosure();
+
   const [selectedDate, setSelectedDate] = useState("");
   const [checked, setChecked] = useState(true); //for switch component
+  const [selectedClass, setSelectedClass] = useState<Class>(classes[0]);
 
   // Whenever checked changes, change the calendar view programmatically
   React.useEffect(() => {
@@ -34,9 +47,19 @@ const SchedulePageSection = () => {
     }
   }, [checked]);
 
+  const handleEventClick = (arg: any) => {
+    const classId = parseInt(arg.event.id);
+    const originalClass = classes.find((c) => c.id === Number(classId));
+
+    if (originalClass) {
+      setSelectedClass(originalClass); // this is now of type Class
+      onClassOpen();
+    }
+  };
+
   const handleDateClick = (arg: any) => {
     setSelectedDate(arg.dateStr); // ISO format like "2025-04-21"
-    onOpen();
+    onDateOpen();
   };
 
   // Call updateSize after month change
@@ -105,8 +128,8 @@ const SchedulePageSection = () => {
             height="auto"
             contentHeight="100%" // Makes the content fill vertical space
             aspectRatio={1.5} // Wider calendar (default is 1.35)
-            //dayCellClassNames={() => "fc-day-cell"}
             eventClassNames={() => "fc-event-custom"}
+            eventClick={handleEventClick}
             dateClick={handleDateClick}
             datesSet={handleDatesSet} // triggers on navigation/view change
           />
@@ -114,11 +137,18 @@ const SchedulePageSection = () => {
       </Flex>
 
       <DialogWindow
-        open={open}
-        onOpen={onOpen}
-        onClose={onClose}
+        open={isDateOpen}
+        onOpen={onDateOpen}
+        onClose={onDateClose}
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
+      />
+
+      <DialogWindowClass
+        open={isClassOpen}
+        onOpen={onClassOpen}
+        onClose={onClassClose}
+        selectedClass={selectedClass}
       />
     </>
   );

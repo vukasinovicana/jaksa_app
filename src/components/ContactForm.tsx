@@ -13,8 +13,52 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 import "./css/ContactForm.css";
+import { useEffect, useState } from "react";
+import { fetchUser } from "../api/user";
+import { useAuth } from "../context/AuthContext";
+import { Toaster, toaster } from "./ui/toaster";
 
 const ContactForm = () => {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [message, setMessage] = useState("");
+  const { isAuthenticated } = useAuth();
+
+  useEffect(() => {
+    const loadUser = async () => {
+      try {
+        const data = await fetchUser();
+        setFirstName(data.firstname);
+        setLastName(data.lastname);
+      } catch (error) {
+        console.error("Failed to fetch user", error);
+      } finally {
+      }
+    };
+    if (isAuthenticated) {
+      loadUser();
+    }
+  }, []);
+
+  const handleSendClick = () => {
+    if (!firstName || !lastName || !message) {
+      toaster.create({
+        title: `Sva polja su obavezna.`,
+        type: "error",
+        closable: true,
+      });
+      return;
+    }
+    const to = "anavukasinovic444@gmail.com"; // your fixed recipient email
+    const subject = encodeURIComponent(
+      `Poruka od ` + firstName + " " + lastName
+    );
+    const body = encodeURIComponent(message);
+
+    const mailtoLink = `mailto:${to}?subject=${subject}&body=${body}`;
+    window.location.href = mailtoLink;
+  };
+
   return (
     <Flex className="contactContainer">
       {/* Left - Contact Info */}
@@ -46,23 +90,42 @@ const ContactForm = () => {
               <HStack gap={4}>
                 <Field.Root>
                   <Field.Label className="formLabel">Ime:</Field.Label>
-                  <Input type="text" className="formInput" />
+                  <Input
+                    readOnly={isAuthenticated}
+                    type="text"
+                    className="formInput"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                  />
                 </Field.Root>
                 <Field.Root>
                   <Field.Label className="formLabel">Prezime:</Field.Label>
-                  <Input type="text" className="formInput" />
+                  <Input
+                    readOnly={isAuthenticated}
+                    type="text"
+                    className="formInput"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                  />
                 </Field.Root>
               </HStack>
               <Field.Root>
                 <Field.Label className="formLabel">Tekst:</Field.Label>
-                <Textarea className="formInput" />
+                <Textarea
+                  className="formInput"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                />
               </Field.Root>
             </Fieldset.Content>
           </Fieldset.Root>
 
-          <Button className="submitButton">Pošalji</Button>
+          <Button className="submitButton" onClick={handleSendClick}>
+            Pošalji
+          </Button>
         </VStack>
       </Box>
+      <Toaster />
     </Flex>
   );
 };

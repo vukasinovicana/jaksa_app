@@ -8,3 +8,6 @@
     background-color: #877358 !important;
 }
 
+.fc-event {
+    cursor: pointer;
+  }
