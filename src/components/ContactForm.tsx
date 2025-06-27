@@ -21,6 +21,7 @@ import { Toaster, toaster } from "./ui/toaster";
 const ContactForm = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [role, setRole] = useState("");
   const [message, setMessage] = useState("");
   const { isAuthenticated } = useAuth();
 
@@ -30,6 +31,7 @@ const ContactForm = () => {
         const data = await fetchUser();
         setFirstName(data.firstname);
         setLastName(data.lastname);
+        setRole(data.role);
       } catch (error) {
         console.error("Failed to fetch user", error);
       } finally {
@@ -49,7 +51,7 @@ const ContactForm = () => {
       });
       return;
     }
-    const to = "anavukasinovic444@gmail.com"; // your fixed recipient email
+    const to = "jaksa.vuk@gmail.com";
     const subject = encodeURIComponent(
       `Poruka od ` + firstName + " " + lastName
     );
@@ -83,48 +85,50 @@ const ContactForm = () => {
       </Box>
 
       {/* Right - Form */}
-      <Box className="contactForm">
-        <VStack gap={4} align="stretch">
-          <Fieldset.Root>
-            <Fieldset.Content>
-              <HStack gap={4}>
+      {role !== "TEACHER" && (
+        <Box className="contactForm">
+          <VStack gap={4} align="stretch">
+            <Fieldset.Root>
+              <Fieldset.Content>
+                <HStack gap={4}>
+                  <Field.Root>
+                    <Field.Label className="formLabel">Ime:</Field.Label>
+                    <Input
+                      readOnly={isAuthenticated}
+                      type="text"
+                      className="formInput"
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                    />
+                  </Field.Root>
+                  <Field.Root>
+                    <Field.Label className="formLabel">Prezime:</Field.Label>
+                    <Input
+                      readOnly={isAuthenticated}
+                      type="text"
+                      className="formInput"
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
+                    />
+                  </Field.Root>
+                </HStack>
                 <Field.Root>
-                  <Field.Label className="formLabel">Ime:</Field.Label>
-                  <Input
-                    readOnly={isAuthenticated}
-                    type="text"
+                  <Field.Label className="formLabel">Tekst:</Field.Label>
+                  <Textarea
                     className="formInput"
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
                   />
                 </Field.Root>
-                <Field.Root>
-                  <Field.Label className="formLabel">Prezime:</Field.Label>
-                  <Input
-                    readOnly={isAuthenticated}
-                    type="text"
-                    className="formInput"
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                  />
-                </Field.Root>
-              </HStack>
-              <Field.Root>
-                <Field.Label className="formLabel">Tekst:</Field.Label>
-                <Textarea
-                  className="formInput"
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                />
-              </Field.Root>
-            </Fieldset.Content>
-          </Fieldset.Root>
+              </Fieldset.Content>
+            </Fieldset.Root>
 
-          <Button className="submitButton" onClick={handleSendClick}>
-            Pošalji
-          </Button>
-        </VStack>
-      </Box>
+            <Button className="submitButton" onClick={handleSendClick}>
+              Pošalji
+            </Button>
+          </VStack>
+        </Box>
+      )}
       <Toaster />
     </Flex>
   );

@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   CloseButton,
   createListCollection,
@@ -44,12 +45,13 @@ const DialogWindow = ({
   const [user, setUser] = useState<User | null>(null);
   const userCollection = users
     ? createListCollection({
-        items: users.map((user) => ({
-          label: `${user.firstname} ${user.lastname} (${user.username})`,
-          value: user.username,
-          // you can keep user object here if needed
-          originalItem: user,
-        })),
+        items: users
+          .filter((user) => user.role === "STUDENT")
+          .map((user) => ({
+            label: `${user.firstname} ${user.lastname} (${user.username})`,
+            value: user.username,
+            originalItem: user,
+          })),
       })
     : createListCollection({ items: [] });
 
@@ -127,7 +129,7 @@ const DialogWindow = ({
                     </HStack>
                   </RadioGroup.Root>
 
-                  {user?.username === "admin" && (
+                  {user?.role === "TEACHER" && (
                     <>
                       <Text fontWeight={"bold"} color={"#1E1E1E"} marginTop={3}>
                         Učenik:
@@ -172,14 +174,7 @@ const DialogWindow = ({
                     setMinute={setMinute}
                     disabled={false}
                   />
-                  <InputGroup
-                    endElement={
-                      <Span color="fg.muted" textStyle="xs">
-                        {description.length} / {100}
-                      </Span>
-                    }
-                    marginTop={3}
-                  >
+                  <Box position="relative" marginTop={3}>
                     <Textarea
                       value={description}
                       placeholder="Opis časa"
@@ -190,8 +185,19 @@ const DialogWindow = ({
                       color="#1E1E1E"
                       border="1px solid"
                       borderColor="#1E1E1E"
+                      paddingRight="4rem" // opcionalno, da ne ide tekst ispod brojača
                     />
-                  </InputGroup>
+                    <Span
+                      position="absolute"
+                      bottom="8px"
+                      right="12px"
+                      color="fg.muted"
+                      textStyle="xs"
+                      pointerEvents="none"
+                    >
+                      {description.length} / {100}
+                    </Span>
+                  </Box>
                 </Flex>
               </Flex>
             </Dialog.Body>

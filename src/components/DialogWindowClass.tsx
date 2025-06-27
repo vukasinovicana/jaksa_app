@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   CloseButton,
   createListCollection,
@@ -21,6 +22,8 @@ import CustomDatePicker from "./CustomDatePicker";
 import { fetchAllUsers, fetchUser } from "../api/user";
 import { User } from "../types/User";
 import { Class } from "../types/Class";
+import { FaPen, FaCheck } from "react-icons/fa";
+import { FaX } from "react-icons/fa6";
 
 interface DialogWindowClassProps {
   open: boolean;
@@ -149,21 +152,19 @@ const DialogWindowClass = ({
                     </HStack>
                   </RadioGroup.Root>
 
-                  {user?.username === "admin" && (
-                    <>
-                      <Text fontWeight={"bold"} color={"#1E1E1E"} marginTop={3}>
-                        Učenik:
-                      </Text>
-                      <Text color={"#1E1E1E"}>
-                        {student.firstname +
-                          " " +
-                          student.lastname +
-                          " ( " +
-                          student.username +
-                          " )"}
-                      </Text>
-                    </>
-                  )}
+                  <>
+                    <Text fontWeight={"bold"} color={"#1E1E1E"} marginTop={3}>
+                      Učenik:
+                    </Text>
+                    <Text color={"#1E1E1E"}>
+                      {student.firstname +
+                        " " +
+                        student.lastname +
+                        " ( " +
+                        student.username +
+                        " )"}
+                    </Text>
+                  </>
                 </Flex>
 
                 {/* Right Column: Time Picker */}
@@ -175,14 +176,7 @@ const DialogWindowClass = ({
                     setMinute={setMinute}
                     disabled={disabled}
                   />
-                  <InputGroup
-                    endElement={
-                      <Span color="fg.muted" textStyle="xs">
-                        {description?.length} / {100}
-                      </Span>
-                    }
-                    marginTop={3}
-                  >
+                  <Box position="relative" marginTop={3}>
                     <Textarea
                       value={description}
                       placeholder="Opis časa"
@@ -194,31 +188,63 @@ const DialogWindowClass = ({
                       border="1px solid"
                       borderColor="#1E1E1E"
                       disabled={disabled}
+                      paddingRight="4rem" // Optional: give some right padding if you want to overlay
                     />
-                  </InputGroup>
+                    <Span
+                      position="absolute"
+                      bottom="8px"
+                      right="12px"
+                      color="fg.muted"
+                      textStyle="xs"
+                      pointerEvents="none"
+                    >
+                      {description?.length} / {100}
+                    </Span>
+                  </Box>
                 </Flex>
               </Flex>
             </Dialog.Body>
             <Dialog.Footer>
-              <Button
-                onClick={() => {
-                  setShowDatePicker(false);
-                  setDisabled(!disabled);
-                }}
-                variant="outline"
-                border="1px solid #1E1E1E"
-              >
-                Izmeni
-              </Button>
+              {disabled && (
+                <Button
+                  onClick={() => {
+                    setShowDatePicker(false);
+                    setDisabled(!disabled);
+                  }}
+                  variant="outline"
+                  border="1px solid #1E1E1E"
+                >
+                  Izmeni
+                  <FaPen />
+                </Button>
+              )}
+              {!disabled && (
+                <Button
+                  onClick={() => {
+                    setShowDatePicker(false);
+                    setDisabled(!disabled);
+                  }}
+                  variant="outline"
+                  backgroundColor={"green"}
+                  color={"white"}
+                  border="1px solid #1E1E1E"
+                >
+                  Sačuvaj
+                  <FaCheck />
+                </Button>
+              )}
               <Button
                 onClick={() => {
                   setShowDatePicker(false);
                   onClose();
                 }}
                 variant="outline"
+                backgroundColor={"red"}
+                color={"white"}
                 border="1px solid #1E1E1E"
               >
-                Otkaži
+                Otkaži čas
+                <FaX />
               </Button>
             </Dialog.Footer>
           </Dialog.Content>
