@@ -20,7 +20,7 @@ import DialogWindow from "../components/DialogWindow";
 import { calendarEvents, classes } from "../utils/classes";
 import "./css/SchedulePage.css";
 import DialogWindowClass from "../components/DialogWindowClass";
-import { Class } from "../types/Class";
+import { Class1 } from "../types/Class1";
 
 const SchedulePageSection = () => {
   const calendarRef = useRef<FullCalendar | null>(null);
@@ -37,7 +37,7 @@ const SchedulePageSection = () => {
 
   const [selectedDate, setSelectedDate] = useState("");
   const [checked, setChecked] = useState(true); //for switch component
-  const [selectedClass, setSelectedClass] = useState<Class>(classes[0]);
+  const [selectedClass, setSelectedClass] = useState<Class1>(classes[0]);
 
   // Whenever checked changes, change the calendar view programmatically
   React.useEffect(() => {

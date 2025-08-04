@@ -31,9 +31,9 @@ const ContactForm = () => {
         const data = await fetchUser();
         setFirstName(data.firstname);
         setLastName(data.lastname);
-        setRole(data.role);
+        setRole(data.role ?? "student");
       } catch (error) {
-        console.error("Failed to fetch user", error);
+        console.error("Greška pri učitavanju podataka.", error);
       } finally {
       }
     };

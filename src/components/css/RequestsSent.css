@@ -1,0 +1,18 @@
+
+.tabs-container {
+    max-width: 800px;     /* isto kao ostatak stranice */
+    margin: 0 auto;        /* centriranje horizontalno */
+    padding-top: 2rem;
+    text-align: center;    /* za centriranje teksta ako treba */
+}
+
+.tabs-list-sent {
+display: flex;
+justify-content: center;
+gap: 2rem;
+margin-bottom: 1.5rem;
+}
+
+.tabs-trigger-sent{
+    color: #A28D72;
+}

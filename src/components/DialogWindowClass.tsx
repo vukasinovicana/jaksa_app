@@ -21,7 +21,7 @@ import { CustomTimePicker } from "./CustomTimePicker";
 import CustomDatePicker from "./CustomDatePicker";
 import { fetchAllUsers, fetchUser } from "../api/user";
 import { User } from "../types/User";
-import { Class } from "../types/Class";
+import { Class1 } from "../types/Class1";
 import { FaPen, FaCheck } from "react-icons/fa";
 import { FaX } from "react-icons/fa6";
 
@@ -29,7 +29,7 @@ interface DialogWindowClassProps {
   open: boolean;
   onOpen: () => void;
   onClose: () => void;
-  selectedClass: Class;
+  selectedClass: Class1;
 }
 
 const DialogWindowClass = ({

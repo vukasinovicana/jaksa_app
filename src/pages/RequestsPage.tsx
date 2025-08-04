@@ -1,72 +1,79 @@
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Spinner, Text } from "@chakra-ui/react";
+import { Tabs } from "@chakra-ui/react";
 import NavBar from "../components/Navbar";
-import { IoIosCloseCircle, IoIosCheckmarkCircle } from "react-icons/io";
-import "./css/RequestsPage.css"; // 👈 new CSS
+import "./css/RequestsPage.css";
+import RequestsSection from "../components/RequestsSection";
+import RequestsSent from "../components/RequestsSent";
+import { useEffect, useState } from "react";
+import { User } from "../types/User";
+import { fetchUser } from "../api/user";
+import { colors } from "../constants";
 
 const RequestsPageSection = () => {
-  const zahtevi = [
-    {
-      ime: "Maja Nikolic",
-      datum: "17.12.2024.",
-      vreme: "18:00",
-      trajanje: "1.5h",
-    },
-    {
-      ime: "Ana Antic",
-      datum: "22.12.2024.",
-      vreme: "19:00",
-      trajanje: "1.5h",
-    },
-    {
-      ime: "Jana Milic",
-      datum: "23.12.2024.",
-      vreme: "15:00",
-      trajanje: "1.5h",
-    },
-  ];
+  const [user, setUser] = useState<User>();
+  const [id, setId] = useState<number>(0);
+
+  useEffect(() => {
+    const loadUser = async () => {
+      try {
+        const data = await fetchUser();
+        setUser(data);
+        //alert(data.id);
+      } catch (error) {
+        console.error("Došlo je do greške.", error);
+      } finally {
+      }
+    };
+
+    loadUser();
+  }, []);
 
   return (
-    <Flex className="requests-section">
+    <div className="tabs-container">
       <Text className="requests-heading">Zahtevi za časove</Text>
-
-      <table className="requests-table">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Ime i prezime</th>
-            <th>Datum</th>
-            <th>Vreme</th>
-            <th>Trajanje</th>
-            <th>Akcija</th>
-          </tr>
-        </thead>
-        <tbody>
-          {zahtevi.map((z, i) => (
-            <tr key={i}>
-              <td>{i + 1}.</td>
-              <td>{z.ime}</td>
-              <td>{z.datum}</td>
-              <td>{z.vreme}</td>
-              <td>{z.trajanje}</td>
-              <td>
-                <div className="requests-actions">
-                  <IoIosCheckmarkCircle
-                    aria-label="Odobri"
-                    size="32px"
-                    color="green"
-                  />
-                  <IoIosCloseCircle
-                    aria-label="Odbij"
-                    size="32px"
-                    color="red"
-                  />
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </Flex>
+      <Tabs.Root defaultValue="pristigli">
+        <Tabs.List className="tabs-list">
+          <Tabs.Trigger
+            className="tabs-trigger"
+            value="poslati"
+            _selected={{
+              color: "#3D2B1F",
+              border: "1px  #3D2B1F",
+            }}
+          >
+            Poslati
+          </Tabs.Trigger>
+          <Tabs.Trigger
+            className="tabs-trigger"
+            value="pristigli"
+            _selected={{
+              color: "#3D2B1F",
+              border: "1px solid #3D2B1F",
+            }}
+          >
+            Pristigli
+          </Tabs.Trigger>
+        </Tabs.List>
+        <Tabs.Content value="poslati">
+          {user ? (
+            <RequestsSent user={user} />
+          ) : (
+            <Flex justify="center" align="center">
+              <Spinner size="xl" color={colors.darkBrown} />
+            </Flex>
+          )}
+        </Tabs.Content>
+        <Tabs.Content value="pristigli">
+          {user ? (
+            <RequestsSection user={user} />
+          ) : (
+            <Flex justify="center" align="center">
+              <Spinner size="xl" color={colors.darkBrown} />
+            </Flex>
+          )}
+        </Tabs.Content>
+      </Tabs.Root>
+    </div>
   );
 };
 

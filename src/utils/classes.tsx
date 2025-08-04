@@ -1,6 +1,6 @@
-import { Class } from "../types/Class";
+import { Class1 } from "../types/Class1";
 
-export const classes: Class[] = [
+export const classes: Class1[] = [
   {
     id: 1,
     date: "2025-06-20",
