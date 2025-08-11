@@ -1,15 +1,11 @@
 import {
   Box,
-  Button,
   CloseButton,
-  createListCollection,
   Dialog,
   Flex,
   HStack,
-  InputGroup,
   Portal,
   RadioGroup,
-  Select,
   Span,
   Text,
   Textarea,
@@ -19,17 +15,17 @@ import "react-time-picker/dist/TimePicker.css";
 import "react-clock/dist/Clock.css";
 import { CustomTimePicker } from "./CustomTimePicker";
 import CustomDatePicker from "./CustomDatePicker";
-import { fetchAllUsers, fetchUser } from "../api/user";
+import { fetchUser } from "../api/user";
 import { User } from "../types/User";
-import { Class1 } from "../types/Class1";
-import { FaPen, FaCheck } from "react-icons/fa";
-import { FaX } from "react-icons/fa6";
+import { Class } from "../types/Class";
+import DeleteClassDialogButton from "./DeleteClassDialogButton";
 
 interface DialogWindowClassProps {
   open: boolean;
   onOpen: () => void;
   onClose: () => void;
-  selectedClass: Class1;
+  selectedClass: Class;
+  onStatusChange: () => void;
 }
 
 const DialogWindowClass = ({
@@ -37,27 +33,15 @@ const DialogWindowClass = ({
   onOpen,
   onClose,
   selectedClass,
+  onStatusChange,
 }: DialogWindowClassProps) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [disabled, setDisabled] = useState(true);
   const [date, setDate] = useState(selectedClass.date);
   const [hour, setHour] = useState(selectedClass.timeStart.split(":")[0]);
   const [minute, setMinute] = useState(selectedClass.timeStart.split(":")[1]);
   const [duration, setDuration] = useState(selectedClass.duration);
-  const [student, setStudent] = useState(selectedClass.student);
   const [description, setDescription] = useState(selectedClass.description);
-  const [users, setUsers] = useState<User[] | null>(null);
   const [user, setUser] = useState<User | null>(null);
-  const userCollection = users
-    ? createListCollection({
-        items: users.map((user) => ({
-          label: `${user.firstname} ${user.lastname} (${user.username})`,
-          value: user.username,
-          // you can keep user object here if needed
-          originalItem: user,
-        })),
-      })
-    : createListCollection({ items: [] });
 
   useEffect(() => {
     if (open && selectedClass) {
@@ -66,16 +50,12 @@ const DialogWindowClass = ({
       setMinute(selectedClass.timeStart.split(":")[1]);
       setDuration(selectedClass.duration);
       setDescription(selectedClass.description);
-      setStudent(selectedClass.student); // add this line
-      setDisabled(true);
     }
   }, [open, selectedClass]);
 
   useEffect(() => {
     const loadData = async () => {
       try {
-        const data_users = await fetchAllUsers();
-        setUsers(data_users);
         const data_user = await fetchUser();
         setUser(data_user);
       } catch (error) {
@@ -83,7 +63,6 @@ const DialogWindowClass = ({
       } finally {
       }
     };
-
     loadData();
   }, []);
 
@@ -124,7 +103,7 @@ const DialogWindowClass = ({
                   <CustomDatePicker
                     selectedDate={date}
                     setSelectedDate={setDate}
-                    disabled={disabled}
+                    disabled={true}
                   />
                   <Text fontWeight={"bold"} color={"#1E1E1E"} marginTop={3}>
                     Trajanje:
@@ -132,19 +111,17 @@ const DialogWindowClass = ({
                   <RadioGroup.Root
                     value={duration}
                     onValueChange={(val: string) => {
-                      const actualValue =
-                        typeof val === "object" && val?.value ? val.value : val;
-                      setDuration(actualValue);
+                      setDuration(val);
                     }}
-                    disabled={disabled}
+                    disabled={true}
                   >
                     <HStack gap="6" marginTop={1}>
-                      <RadioGroup.Item value="1">
+                      <RadioGroup.Item value="1h">
                         <RadioGroup.ItemHiddenInput />
                         <RadioGroup.ItemIndicator />
                         <RadioGroup.ItemText>1h</RadioGroup.ItemText>
                       </RadioGroup.Item>
-                      <RadioGroup.Item value="1.5">
+                      <RadioGroup.Item value="1.5h">
                         <RadioGroup.ItemHiddenInput />
                         <RadioGroup.ItemIndicator />
                         <RadioGroup.ItemText>1.5h</RadioGroup.ItemText>
@@ -157,12 +134,9 @@ const DialogWindowClass = ({
                       Učenik:
                     </Text>
                     <Text color={"#1E1E1E"}>
-                      {student.firstname +
+                      {selectedClass.studentFirstName +
                         " " +
-                        student.lastname +
-                        " ( " +
-                        student.username +
-                        " )"}
+                        selectedClass.studentLastName}
                     </Text>
                   </>
                 </Flex>
@@ -174,7 +148,7 @@ const DialogWindowClass = ({
                     setHour={setHour}
                     minute={minute}
                     setMinute={setMinute}
-                    disabled={disabled}
+                    disabled={true}
                   />
                   <Box position="relative" marginTop={3}>
                     <Textarea
@@ -187,8 +161,8 @@ const DialogWindowClass = ({
                       color="#1E1E1E"
                       border="1px solid"
                       borderColor="#1E1E1E"
-                      disabled={disabled}
-                      paddingRight="4rem" // Optional: give some right padding if you want to overlay
+                      disabled={true}
+                      paddingRight="4rem"
                     />
                     <Span
                       position="absolute"
@@ -205,47 +179,15 @@ const DialogWindowClass = ({
               </Flex>
             </Dialog.Body>
             <Dialog.Footer>
-              {disabled && (
-                <Button
-                  onClick={() => {
-                    setShowDatePicker(false);
-                    setDisabled(!disabled);
+              {user?.id === selectedClass.studentId && (
+                <DeleteClassDialogButton
+                  classId={selectedClass.id}
+                  onStatusChange={() => {
+                    onStatusChange();
+                    onClose();
                   }}
-                  variant="outline"
-                  border="1px solid #1E1E1E"
-                >
-                  Izmeni
-                  <FaPen />
-                </Button>
+                />
               )}
-              {!disabled && (
-                <Button
-                  onClick={() => {
-                    setShowDatePicker(false);
-                    setDisabled(!disabled);
-                  }}
-                  variant="outline"
-                  backgroundColor={"green"}
-                  color={"white"}
-                  border="1px solid #1E1E1E"
-                >
-                  Sačuvaj
-                  <FaCheck />
-                </Button>
-              )}
-              <Button
-                onClick={() => {
-                  setShowDatePicker(false);
-                  onClose();
-                }}
-                variant="outline"
-                backgroundColor={"red"}
-                color={"white"}
-                border="1px solid #1E1E1E"
-              >
-                Otkaži čas
-                <FaX />
-              </Button>
             </Dialog.Footer>
           </Dialog.Content>
         </Dialog.Positioner>

@@ -13,12 +13,30 @@ import {
 } from "../api/class";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import StatusIcon from "./StatusIcon";
-import DeleteClassDialogButton from "./DeleteClassButton";
+import DeleteClassDialogButton from "./DeleteClassDialogButton";
 import React from "react";
 
 interface RequestsSectionProps {
   user?: User;
   status?: string;
+}
+
+export function calculateEndTime(startTime: string, durationStr: string) {
+  const [startHours, startMinutes, startSeconds] = startTime
+    .split(":")
+    .map(Number);
+  const startDate = new Date();
+  startDate.setHours(startHours, startMinutes, startSeconds);
+
+  const durationInHours = parseFloat(durationStr.replace("h", ""));
+  const durationInMinutes = durationInHours * 60;
+
+  startDate.setMinutes(startDate.getMinutes() + durationInMinutes);
+
+  const endHours = startDate.getHours().toString().padStart(2, "0");
+  const endMinutes = startDate.getMinutes().toString().padStart(2, "0");
+
+  return `${endHours}:${endMinutes}`;
 }
 
 const RequestsSection = ({ user, status }: RequestsSectionProps) => {
@@ -69,24 +87,6 @@ const RequestsSection = ({ user, status }: RequestsSectionProps) => {
 
     loadRequests();
   }, []);
-
-  function calculateEndTime(startTime: string, durationStr: string) {
-    const [startHours, startMinutes, startSeconds] = startTime
-      .split(":")
-      .map(Number);
-    const startDate = new Date();
-    startDate.setHours(startHours, startMinutes, startSeconds);
-
-    const durationInHours = parseFloat(durationStr.replace("h", ""));
-    const durationInMinutes = durationInHours * 60;
-
-    startDate.setMinutes(startDate.getMinutes() + durationInMinutes);
-
-    const endHours = startDate.getHours().toString().padStart(2, "0");
-    const endMinutes = startDate.getMinutes().toString().padStart(2, "0");
-
-    return `${endHours}:${endMinutes}`;
-  }
 
   return (
     <Flex className="requests-section">

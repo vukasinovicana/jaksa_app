@@ -17,10 +17,13 @@ import srLocale from "@fullcalendar/core/locales/sr"; // Serbian locale
 import "react-datepicker/dist/react-datepicker.css";
 import { useRef, useState } from "react";
 import DialogWindow from "../components/DialogWindow";
-import { calendarEvents, classes } from "../utils/classes";
 import "./css/SchedulePage.css";
 import DialogWindowClass from "../components/DialogWindowClass";
-import { Class1 } from "../types/Class1";
+import { Class } from "../types/Class";
+import { fetchAllClasses } from "../api/class";
+import { calculateEndTime } from "../components/RequestsSection";
+import { User } from "../types/User";
+import { fetchUser } from "../api/user";
 
 const SchedulePageSection = () => {
   const calendarRef = useRef<FullCalendar | null>(null);
@@ -37,7 +40,54 @@ const SchedulePageSection = () => {
 
   const [selectedDate, setSelectedDate] = useState("");
   const [checked, setChecked] = useState(true); //for switch component
-  const [selectedClass, setSelectedClass] = useState<Class1>(classes[0]);
+  const [selectedClass, setSelectedClass] = useState<Class | null>(null);
+  const [classes, setClasses] = useState<Class[]>([]);
+  const [calendarEvents, setCalendarEvents] = useState<any[]>([]); // FullCalendar EventInput[]
+
+  // Fetch classes on mount
+  React.useEffect(() => {
+    const fetchClasses = async () => {
+      try {
+        const data_user = await fetchUser();
+        const classes = await fetchAllClasses();
+        // keep only approved ones
+        const approvedClasses = classes.filter(
+          (cls) => cls.classStatus === "APPROVED"
+        );
+
+        setClasses(approvedClasses);
+
+        const events = approvedClasses.map(
+          ({
+            id,
+            date,
+            timeStart,
+            duration,
+            studentFirstName,
+            studentLastName,
+            studentId,
+          }) => ({
+            id: id.toString(),
+            title: studentFirstName + " " + studentLastName || "Čas",
+            start: `${date}T${timeStart}`,
+            end: `${date}T${calculateEndTime(timeStart, duration)}`,
+            className:
+              Number(studentId) === Number(data_user?.id)
+                ? "fc-event-user"
+                : "fc-event-custom",
+          })
+        );
+        setCalendarEvents(events);
+        if (approvedClasses.length > 0) {
+          setSelectedClass(approvedClasses[0]);
+        }
+      } catch (error) {
+        console.error("Došlo je do greške.", error);
+      }
+    };
+
+    fetchClasses();
+  }, []);
 
   // Whenever checked changes, change the calendar view programmatically
   React.useEffect(() => {
@@ -142,14 +192,27 @@ const SchedulePageSection = () => {
         onClose={onDateClose}
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
+        classes={classes}
       />
 
-      <DialogWindowClass
-        open={isClassOpen}
-        onOpen={onClassOpen}
-        onClose={onClassClose}
-        selectedClass={selectedClass}
-      />
+      {selectedClass && (
+        <DialogWindowClass
+          open={isClassOpen}
+          onOpen={onClassOpen}
+          onClose={onClassClose}
+          selectedClass={selectedClass}
+          onStatusChange={() => {
+            setClasses((prev) =>
+              prev?.filter((r) => r.id !== selectedClass.id)
+            );
+            setCalendarEvents((prevEvents) =>
+              prevEvents.filter(
+                (event) => event.id !== selectedClass.id.toString()
+              )
+            );
+          }}
+        />
+      )}
     </>
   );
 };

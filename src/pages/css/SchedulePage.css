@@ -4,6 +4,12 @@
     color: white !important;
 }
 
+.fc-event-user {
+    background-color: darkgreen !important;
+    border: none;
+    color: white !important; 
+}
+
 .calendar-wrapper .fc-button {
     background-color: #877358 !important;
 }

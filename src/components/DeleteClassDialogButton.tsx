@@ -51,7 +51,7 @@ const DeleteClassDialogButton = ({
       >
         <Portal>
           <DialogBackdrop />
-          <DialogPositioner>
+          <DialogPositioner zIndex={2000}>
             <DialogContent>
               <DialogHeader></DialogHeader>
               <DialogBody>

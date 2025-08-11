@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Class } from "../types/Class";
+import { ClassRequest } from "../types/ClassRequest";
 
 export const fetchAllClassesForStudent = async (
   studentId: number
@@ -71,6 +72,25 @@ export const deleteClass = async (classId: number): Promise<string> => {
     {
       headers: {
         Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  return res.data;
+};
+
+export const createClassRequest = async (
+  request: ClassRequest
+): Promise<string> => {
+  const token = localStorage.getItem("token");
+
+  const res = await axios.post(
+    "http://localhost:8080/api/class/createClassRequest",
+    request,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
       },
     }
   );
