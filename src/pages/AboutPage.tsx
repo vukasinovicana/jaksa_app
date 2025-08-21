@@ -3,12 +3,19 @@ import NavBar from "../components/Navbar";
 import { colors, texts } from "../constants";
 import slika_sa_djacima from "../assets/slika_sa_djacima.png";
 import tata_profilna from "../assets/tata_profilna.jpg";
+import slika_sa_djacima_1 from "../assets/slika_sa_djacima_1.jpeg";
+import slika_sa_djacima_2 from "../assets/slika_sa_djacima_2.jpeg";
 import { ImageSlider } from "../components/ImageSlider";
 import TextBox from "../components/TextBox";
 import ContactForm from "../components/ContactForm";
 import "./css/AboutPage.css";
 
-const images = [tata_profilna, slika_sa_djacima];
+const images = [
+  tata_profilna,
+  slika_sa_djacima,
+  slika_sa_djacima_1,
+  slika_sa_djacima_2,
+];
 
 const AboutPageSection = () => {
   return (

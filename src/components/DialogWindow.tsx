@@ -24,6 +24,7 @@ import { User } from "../types/User";
 import { createClassRequest } from "../api/class";
 import { toaster, Toaster } from "./ui/toaster";
 import { Class } from "../types/Class";
+import { validateClassTime } from "../utils/classValidation";
 
 interface DialogWindowProps {
   open: boolean;
@@ -86,6 +87,7 @@ const DialogWindow = ({
       console.error("Datum i vreme su obavezni.");
       return;
     }
+
     const timeStart = `${hour.padStart(2, "0")}:${minute.padStart(2, "0")}`;
     const studentId = user?.role === "TEACHER" ? selectedStudent?.id : user?.id;
 
@@ -98,52 +100,21 @@ const DialogWindow = ({
       return;
     }
 
-    // Provera da li je datum prošlosti
-    const now = new Date();
-    const selectedDateTime = new Date(`${selectedDate}T${timeStart}`);
-    if (selectedDateTime < now) {
-      toaster.create({
-        title: `Izabrano vreme i datum su u prošlosti.`,
-        type: "error",
-        closable: true,
-      });
-      return;
-    }
-
-    // Izračunavanje kraja novog časa
-    const durationMinutes = duration === "1h" ? 60 : 90;
-    const selectedEndTime = new Date(
-      selectedDateTime.getTime() + durationMinutes * 60 * 1000
-    );
-
-    // Provera preklapanja sa postojećim odobrenim časovima
-    const conflict = classes?.some((cls) => {
-      if (cls.date !== selectedDate || cls.classStatus !== "APPROVED")
-        return false;
-
-      const existingStart = new Date(`${cls.date}T${cls.timeStart}`);
-      const existingEnd = new Date(
-        existingStart.getTime() + (cls.duration === "1h" ? 60 : 90) * 60 * 1000
-      );
-
-      // Provera da li se intervali preklapaju
-      return selectedDateTime < existingEnd && selectedEndTime > existingStart;
+    const isValid = validateClassTime({
+      date: selectedDate,
+      timeStart,
+      duration,
+      classes,
+      toaster,
     });
 
-    if (conflict) {
-      toaster.create({
-        title: `Izabran termin nije slobodan.`,
-        type: "error",
-        closable: true,
-      });
-      return;
-    }
+    if (!isValid) return;
 
     try {
       await createClassRequest({
         studentId,
-        date: selectedDate, // format "YYYY-MM-DD"
-        timeStart, // format "HH:mm"
+        date: selectedDate,
+        timeStart,
         duration,
         description,
         requestedByStudent: user?.role === "STUDENT",

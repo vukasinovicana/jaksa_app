@@ -72,7 +72,9 @@ const SchedulePageSection = () => {
             start: `${date}T${timeStart}`,
             end: `${date}T${calculateEndTime(timeStart, duration)}`,
             className:
-              Number(studentId) === Number(data_user?.id)
+              data_user.role !== "student"
+                ? "fc-event-user"
+                : Number(studentId) === Number(data_user?.id)
                 ? "fc-event-user"
                 : "fc-event-custom",
           })

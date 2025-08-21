@@ -15,6 +15,8 @@ import { RiDeleteBin5Line } from "react-icons/ri";
 import StatusIcon from "./StatusIcon";
 import DeleteClassDialogButton from "./DeleteClassDialogButton";
 import React from "react";
+import { toaster, Toaster } from "./ui/toaster";
+import { validateClassTime } from "../utils/classValidation";
 
 interface RequestsSectionProps {
   user?: User;
@@ -42,25 +44,21 @@ export function calculateEndTime(startTime: string, durationStr: string) {
 const RequestsSection = ({ user, status }: RequestsSectionProps) => {
   const [requests, setRequests] = useState<Class[]>();
   const is_student = user?.role == "STUDENT";
-
-  const handleDeleteClass = async (classId: number) => {
-    try {
-      const result = await deleteClass(classId);
-      console.log("Class deleted:", result);
-    } catch (error) {
-      console.error("Greška pri brisanju časa", error);
-    }
-  };
+  const [allClasses, setAllClasses] = useState<Class[]>([]);
 
   useEffect(() => {
     const loadRequests = async () => {
       try {
         let data: Class[] = [];
+        let allClasses: Class[] = [];
 
         if (is_student) {
           data = await fetchAllClassesForStudent(user?.id ?? 0);
+          allClasses = await fetchAllClasses();
+          setAllClasses(allClasses);
         } else {
           data = await fetchAllClasses();
+          setAllClasses(data);
         }
 
         let filtered: Class[] = [];
@@ -87,6 +85,29 @@ const RequestsSection = ({ user, status }: RequestsSectionProps) => {
 
     loadRequests();
   }, []);
+
+  async function handleAcceptRequest(req: Class) {
+    const isValid = validateClassTime({
+      date: req.date,
+      timeStart: req.timeStart,
+      duration: req.duration,
+      classes: allClasses,
+      toaster,
+    });
+
+    if (!isValid) return;
+
+    try {
+      await acceptRequest(req.id);
+      setRequests((prev) =>
+        prev?.map((r) =>
+          r.id === req.id ? { ...r, classStatus: "APPROVED" } : r
+        )
+      );
+    } catch (err) {
+      console.error("Greška prilikom prihvatanja časa:", err);
+    }
+  }
 
   return (
     <Flex className="requests-section">
@@ -124,10 +145,6 @@ const RequestsSection = ({ user, status }: RequestsSectionProps) => {
           {requests?.map((req, i) => {
             const timeStart = req.timeStart.split(":").slice(0, 2).join(":");
             const timeEnd = calculateEndTime(req.timeStart, req.duration);
-
-            function acceptClass(id: number) {
-              throw new Error("Function not implemented.");
-            }
 
             return (
               <React.Fragment key={req.id}>
@@ -170,23 +187,7 @@ const RequestsSection = ({ user, status }: RequestsSectionProps) => {
                         req.classStatus == "PENDING" && (
                           <Button
                             className="action-button"
-                            onClick={async () => {
-                              try {
-                                await acceptRequest(req.id);
-                                setRequests((prev) =>
-                                  prev?.map((r) =>
-                                    r.id === req.id
-                                      ? { ...r, classStatus: "APPROVED" }
-                                      : r
-                                  )
-                                );
-                              } catch (err) {
-                                console.error(
-                                  "Greška prilikom prihvatanja časa:",
-                                  err
-                                );
-                              }
-                            }}
+                            onClick={() => handleAcceptRequest(req)}
                           >
                             <IoIosCheckmarkCircle color="green" /> Prihvati
                           </Button>
@@ -224,6 +225,7 @@ const RequestsSection = ({ user, status }: RequestsSectionProps) => {
           })}
         </Table.Body>
       </Table.Root>
+      <Toaster />
     </Flex>
   );
 };
