@@ -64,14 +64,13 @@ const RequestsSection = ({ user, status }: RequestsSectionProps) => {
         let filtered: Class[] = [];
 
         if (status !== undefined) {
-          // Poslati zahtevi
+          // Sent requests
           filtered = data.filter((req) =>
             is_student
               ? req.classStatus === status && req.requestedByStudent
               : req.classStatus === status && !req.requestedByStudent
           );
         } else {
-          // Primljeni zahtevi
           filtered = data.filter((req) =>
             is_student ? !req.requestedByStudent : req.requestedByStudent
           );

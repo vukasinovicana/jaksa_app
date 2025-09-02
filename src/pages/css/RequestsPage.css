@@ -16,10 +16,10 @@
   }
   
   .tabs-container {
-    max-width: 800px;     /* isto kao ostatak stranice */
-    margin: 0 auto;        /* centriranje horizontalno */
+    max-width: 800px;     
+    margin: 0 auto;        
     padding-top: 2rem;
-    text-align: center;    /* za centriranje teksta ako treba */
+    text-align: center;   
   }
   
   .tabs-list {

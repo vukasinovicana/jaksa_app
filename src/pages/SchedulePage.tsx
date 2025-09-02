@@ -72,7 +72,7 @@ const SchedulePageSection = () => {
             start: `${date}T${timeStart}`,
             end: `${date}T${calculateEndTime(timeStart, duration)}`,
             className:
-              data_user.role !== "student"
+              data_user.role !== "STUDENT"
                 ? "fc-event-user"
                 : Number(studentId) === Number(data_user?.id)
                 ? "fc-event-user"
@@ -183,7 +183,7 @@ const SchedulePageSection = () => {
             eventClassNames={() => "fc-event-custom"}
             eventClick={handleEventClick}
             dateClick={handleDateClick}
-            datesSet={handleDatesSet} // triggers on navigation/view change
+            datesSet={handleDatesSet} // Triggers on navigation/view change
           />
         </Box>
       </Flex>

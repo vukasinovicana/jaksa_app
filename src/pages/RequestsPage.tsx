@@ -18,7 +18,6 @@ const RequestsPageSection = () => {
       try {
         const data = await fetchUser();
         setUser(data);
-        //alert(data.id);
       } catch (error) {
         console.error("Došlo je do greške.", error);
       } finally {

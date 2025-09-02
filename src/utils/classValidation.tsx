@@ -19,7 +19,6 @@ export function validateClassTime({
   const now = new Date();
   const selectedDateTime = new Date(`${date}T${timeStart}`);
 
-  // 1. Provera da li je u prošlosti
   if (selectedDateTime < now) {
     toaster.create({
       title: `Izabrano vreme i datum su u prošlosti.`,
@@ -29,13 +28,11 @@ export function validateClassTime({
     return false;
   }
 
-  // 2. Izračunavanje kraja časa
   const durationMinutes = duration === "1h" ? 60 : 90;
   const selectedEndTime = new Date(
     selectedDateTime.getTime() + durationMinutes * 60 * 1000
   );
 
-  // 3. Provera preklapanja sa postojećim odobrenim časovima
   const conflict = classes?.some((cls) => {
     if (cls.date !== date || cls.classStatus !== "APPROVED") return false;
 

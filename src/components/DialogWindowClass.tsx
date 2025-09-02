@@ -95,7 +95,6 @@ const DialogWindowClass = ({
             </Dialog.Header>
             <Dialog.Body>
               <Flex gap={6}>
-                {/* Left Column: Date Selection */}
                 <Flex direction="column" flex={1} gap={2}>
                   <Text fontWeight={"bold"} color={"#1E1E1E"}>
                     Datum:
@@ -141,7 +140,6 @@ const DialogWindowClass = ({
                   </>
                 </Flex>
 
-                {/* Right Column: Time Picker */}
                 <Flex direction="column" flex={1} gap={6}>
                   <CustomTimePicker
                     hour={hour}

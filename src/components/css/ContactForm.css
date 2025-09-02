@@ -1,6 +1,6 @@
 .contactContainer {
     width: 100%;
-    background-color: #877358; /* brownNavbar */
+    background-color: #877358;
     padding: 2.5rem;
     display: flex;
     flex-direction: column;
@@ -61,11 +61,11 @@
   .formLabel {
     margin-top: -0.25rem;
     font-size: 0.875rem;
-    color: #ede0d4; /* cream */
+    color: #ede0d4;
   }
   
   .formInput {
-    background-color: #ede0d4; /* cream */
+    background-color: #ede0d4;
     border: 1px solid #ede0d4;
   }
   

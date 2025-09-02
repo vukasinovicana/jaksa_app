@@ -1,10 +1,10 @@
 import React from "react";
 import { Box, Flex, Text, Image } from "@chakra-ui/react";
-import NavBar from "../components/Navbar";
 import StatsSection from "../components/StatsSection";
 import slika_sa_djacima from "../assets/slika_sa_djacima.png";
 import { colors } from "../constants";
-import "./css/HomePage.css"; // 👈 Import the CSS
+import "./css/HomePage.css";
+import NavBar from "../components/Navbar";
 
 const HomePageSection = () => {
   return (

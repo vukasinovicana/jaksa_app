@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, List, Text } from "@chakra-ui/react";
-import "./css/TextBox.css"; // ✅ Import the CSS file
+import "./css/TextBox.css";
 
 type Point = {
   label: string;

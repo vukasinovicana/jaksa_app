@@ -63,7 +63,6 @@ const ContactForm = () => {
 
   return (
     <Flex className="contactContainer">
-      {/* Left - Contact Info */}
       <Box className="contactInfo">
         <Heading className="contactHeading">Kontakt</Heading>
         <VStack align="start" spacing={4} className="contactDetails">
@@ -84,7 +83,6 @@ const ContactForm = () => {
         </VStack>
       </Box>
 
-      {/* Right - Form */}
       {role !== "TEACHER" && (
         <Box className="contactForm">
           <VStack gap={4} align="stretch">

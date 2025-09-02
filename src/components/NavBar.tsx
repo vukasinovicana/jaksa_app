@@ -10,8 +10,7 @@ import {
 import { FaBars, FaPhone, FaUser } from "react-icons/fa";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-
-import "./css/NavBar.css"; // Import the CSS file
+import "./css/NavBar.css";
 
 function NavBar() {
   const isMobile = useBreakpointValue({ base: true, md: false });

@@ -28,8 +28,8 @@ const DeleteClassDialogButton = ({
 
   const handleDelete = async () => {
     try {
-      await deleteClass(classId); // poziv tvoje API funkcije
-      onStatusChange(); // ažuriranje statusa u tabeli
+      await deleteClass(classId);
+      onStatusChange();
     } catch (error) {
       console.error("Greška pri brisanju časa:", error);
     } finally {
